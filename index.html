@@ -269,8 +269,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 }
 
 .card-badges {
-  display: flex; flex-direction: column; gap: 3px;
-  align-items: flex-end; flex: 0 0 auto;
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
 }
 
 .party-badge {
@@ -628,8 +627,8 @@ function cardHTML(m) {
             <div class="mla-name">${m.firstName ? m.firstName+" "+m.lastName : m.lastName}</div>
             <div class="mla-riding">${m.riding}</div>
           </div>
-          <div class="card-badges">${badges}</div>
         </div>
+        <div class="card-badges">${badges}</div>
         ${changeHTML}
       </div>
     </div>`;
