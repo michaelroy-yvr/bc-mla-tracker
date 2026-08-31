@@ -615,7 +615,9 @@ function cardHTML(m) {
   if (m.firstElected) badges += `<span class="elected-badge">First elected ${m.firstElected}</span>`;
   if (m.role)         badges += `<span class="role-badge">${m.role}</span>`;
 
-  const changeHTML = m.changeNote ? `<div class="change-note">${m.changeNote}</div>` : "";
+  const changeHTML = m.changeNote
+    ? `<div class="change-note">${m.changeNote.split("; ").join("<br>")}</div>`
+    : "";
 
   return `
     <div class="mla-card${isVacant?" is-vacant":""}" data-party="${m.currentParty}">
