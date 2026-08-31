@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>BC MLA Tracker</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* ── tokens ── */
+:root {
+  --bg: #F4F3EF;
+  --surface: #FFFFFF;
+  --text: #1A1A1A;
+  --muted: #6B6360;
+  --border: #E0DDD8;
+  --header-bg: #0D2040;
+  --header-text: #FFFFFF;
+  --filter-bg: #EEECEA;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,.12);
+
+  --ndp:   #E8721A;
+  --con:   #003F8C;
+  --grn:   #2E7D32;
+  --onebc: #7B1FA2;
+  --ind:   #546E7A;
+  --vac:   #9E9E9E;
+
+  --ndp-bg:   #FFF3E6;
+  --con-bg:   #E8EEF7;
+  --grn-bg:   #E8F5E9;
+  --onebc-bg: #F3E5F5;
+  --ind-bg:   #ECEFF1;
+  --vac-bg:   #F5F5F5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111827;
+    --surface: #1F2937;
+    --text: #F3F0EB;
+    --muted: #9CA3AF;
+    --border: #374151;
+    --filter-bg: #1A2332;
+    --shadow: 0 1px 3px rgba(0,0,0,.4);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,.5);
+    --ndp-bg:   #2A1800;
+    --con-bg:   #001833;
+    --grn-bg:   #0A1F0A;
+    --onebc-bg: #1A0A2A;
+    --ind-bg:   #0E1A20;
+    --vac-bg:   #1A1A1A;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111827;
+  --surface: #1F2937;
+  --text: #F3F0EB;
+  --muted: #9CA3AF;
+  --border: #374151;
+  --filter-bg: #1A2332;
+  --shadow: 0 1px 3px rgba(0,0,0,.4);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,.5);
+  --ndp-bg:   #2A1800;
+  --con-bg:   #001833;
+  --grn-bg:   #0A1F0A;
+  --onebc-bg: #1A0A2A;
+  --ind-bg:   #0E1A20;
+  --vac-bg:   #1A1A1A;
+}
+
+/* ── reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Sans 3', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── header ── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--header-bg);
+  color: var(--header-text);
+  padding: 0 20px;
+}
+.header-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 0;
+  flex-wrap: wrap;
+}
+.site-brand { flex: 0 0 auto; }
+.site-name {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  color: #fff;
+}
+.site-meta {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+.seat-bar-wrap { flex: 1; min-width: 200px; }
+.seat-pills {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  justify-content: flex-end;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: .03em;
+  padding: 3px 8px 3px 6px;
+  border-radius: 20px;
+  line-height: 1;
+  cursor: default;
+}
+.pill-count { font-size: 0.85rem; font-weight: 700; }
+.pill.ndp   { background: rgba(232,114,26,.25);  color: #FFB877; border: 1px solid rgba(232,114,26,.4); }
+.pill.con   { background: rgba(0,63,140,.35);     color: #7BAEE8; border: 1px solid rgba(0,63,140,.5); }
+.pill.grn   { background: rgba(46,125,50,.3);     color: #81C784; border: 1px solid rgba(46,125,50,.5); }
+.pill.onebc { background: rgba(123,31,162,.3);    color: #CE93D8; border: 1px solid rgba(123,31,162,.5); }
+.pill.ind   { background: rgba(84,110,122,.3);    color: #90A4AE; border: 1px solid rgba(84,110,122,.5); }
+.pill.vac   { background: rgba(158,158,158,.2);   color: #BDBDBD; border: 1px solid rgba(158,158,158,.4); }
+
+.seat-prop-bar { height: 3px; display: flex; width: 100%; overflow: hidden; }
+.seat-prop-bar span { display: block; }
+
+/* ── controls bar ── */
+.controls-bar {
+  position: sticky; top: 60px; z-index: 90;
+  background: var(--filter-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+}
+.controls-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.filter-group { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.filter-btn {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: .03em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: opacity .15s, box-shadow .15s;
+  line-height: 1.4;
+}
+.filter-btn.active { opacity: 1; }
+.filter-btn:not(.active) { opacity: .45; }
+.filter-btn:hover { opacity: .85; box-shadow: var(--shadow); }
+.filter-btn.ndp   { background: var(--ndp-bg);   color: var(--ndp);   border-color: var(--ndp); }
+.filter-btn.con   { background: var(--con-bg);   color: var(--con);   border-color: var(--con); }
+.filter-btn.grn   { background: var(--grn-bg);   color: var(--grn);   border-color: var(--grn); }
+.filter-btn.onebc { background: var(--onebc-bg); color: var(--onebc); border-color: var(--onebc); }
+.filter-btn.ind   { background: var(--ind-bg);   color: var(--ind);   border-color: var(--ind); }
+.filter-btn.vac   { background: var(--vac-bg);   color: var(--vac);   border-color: var(--vac); }
+
+.sort-wrap { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+.sort-label { font-size: 0.72rem; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.sort-select {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.8rem;
+  padding: 4px 28px 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.result-count { font-size: 0.72rem; color: var(--muted); letter-spacing: .03em; padding: 0 4px; }
+
+/* ── main grid ── */
+main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
+
+.caucus-section { margin-bottom: 32px; }
+.caucus-heading {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+.caucus-heading-stripe { width: 4px; height: 20px; border-radius: 2px; }
+.caucus-heading h2 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+.caucus-count { font-size: 0.75rem; color: var(--muted); margin-left: 2px; }
+
+.mla-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+/* ── card ── */
+.mla-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  overflow: hidden;
+  transition: box-shadow .18s, transform .18s;
+}
+.mla-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+.mla-card.is-vacant { opacity: .7; }
+
+.party-stripe { width: 4px; flex: 0 0 4px; }
+.party-stripe.ndp   { background: var(--ndp); }
+.party-stripe.con   { background: var(--con); }
+.party-stripe.grn   { background: var(--grn); }
+.party-stripe.onebc { background: var(--onebc); }
+.party-stripe.ind   { background: var(--ind); }
+.party-stripe.vac   { background: var(--vac); }
+
+.card-inner {
+  padding: 12px 14px 12px 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  flex: 1; min-width: 0;
+}
+.card-top {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+
+/* avatar: photo or initials fallback */
+.avatar {
+  width: 52px; height: 52px; flex: 0 0 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.avatar img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+  border-radius: 50%;
+}
+.avatar .init {
+  font-size: 0.82rem; font-weight: 700;
+  color: #fff; letter-spacing: .02em;
+  text-transform: uppercase;
+  user-select: none;
+  position: relative; z-index: 1;
+  display: none;
+}
+.avatar.ndp   { background: var(--ndp); }
+.avatar.con   { background: var(--con); }
+.avatar.grn   { background: var(--grn); }
+.avatar.onebc { background: var(--onebc); }
+.avatar.ind   { background: var(--ind); }
+.avatar.vac   { background: var(--vac); }
+
+.card-identity { flex: 1; min-width: 0; }
+.mla-name {
+  font-size: 0.9rem; font-weight: 700; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
+}
+.mla-riding {
+  font-size: 0.75rem; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 1px; line-height: 1.3;
+}
+
+.card-badges {
+  display: flex; flex-direction: column; gap: 3px;
+  align-items: flex-end; flex: 0 0 auto;
+}
+
+.party-badge {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: .04em;
+  padding: 2px 7px; border-radius: 20px; text-transform: uppercase; line-height: 1.5;
+}
+.party-badge.ndp   { background: var(--ndp-bg);   color: var(--ndp); }
+.party-badge.con   { background: var(--con-bg);   color: var(--con); }
+.party-badge.grn   { background: var(--grn-bg);   color: var(--grn); }
+.party-badge.onebc { background: var(--onebc-bg); color: var(--onebc); }
+.party-badge.ind   { background: var(--ind-bg);   color: var(--ind); }
+.party-badge.vac   { background: var(--vac-bg);   color: var(--vac); }
+
+.elected-badge {
+  font-size: 0.65rem; color: var(--muted);
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 2px 7px; border-radius: 20px; line-height: 1.5;
+}
+.role-badge {
+  font-size: 0.62rem; font-weight: 600; color: #7A5800;
+  background: #FFF8E1; border: 1px solid #FFD54F;
+  padding: 2px 7px; border-radius: 20px; line-height: 1.5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .role-badge { color: #FFD54F; background: #2A2000; border-color: #7A5800; }
+}
+:root[data-theme="dark"] .role-badge { color: #FFD54F; background: #2A2000; border-color: #7A5800; }
+
+.change-note {
+  font-size: 0.7rem; color: var(--muted);
+  font-style: italic; line-height: 1.4;
+  padding: 5px 10px; background: var(--bg);
+  border-top: 1px solid var(--border); border-radius: 0 0 4px 4px;
+  margin: 0 -14px -12px -12px;
+}
+.empty-state { padding: 60px 20px; text-align: center; color: var(--muted); font-size: 1rem; display: none; }
+.empty-state.visible { display: block; }
+
+@media (max-width: 600px) {
+  .header-inner { padding: 10px 0; }
+  .site-name { font-size: 1.1rem; }
+  .seat-pills { justify-content: flex-start; }
+  .mla-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .card-inner { padding: 10px 10px 10px 8px; }
+  .card-top { gap: 8px; }
+  .avatar { width: 44px; height: 44px; flex: 0 0 44px; }
+}
+@media (max-width: 380px) {
+  .mla-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="site-brand">
+      <div class="site-name">BC MLA Tracker</div>
+      <div class="site-meta">43rd Parliament &middot; Updated Aug 30, 2026</div>
+    </div>
+    <div class="seat-bar-wrap">
+      <div class="seat-pills" id="seatPills"></div>
+    </div>
+  </div>
+  <div class="seat-prop-bar" id="propBar"></div>
+</header>
+
+<div class="controls-bar">
+  <div class="controls-inner">
+    <div class="filter-group" id="filterGroup"></div>
+    <div class="sort-wrap">
+      <span class="sort-label">Sort</span>
+      <select class="sort-select" id="sortSelect">
+        <option value="caucus-alpha">Caucus, A–Z</option>
+        <option value="alpha">Last name A–Z</option>
+        <option value="riding">Riding A–Z</option>
+        <option value="first-elected-asc">First elected (oldest)</option>
+        <option value="first-elected-desc">First elected (newest)</option>
+      </select>
+    </div>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+</div>
+
+<main id="mainContent">
+  <div class="empty-state" id="emptyState">No MLAs match the current filters.</div>
+</main>
+
+<script>
+// ─────────────────────────────────────────────
+// PHOTO BASE URL
+// ─────────────────────────────────────────────
+const PHOTO_BASE = 'https://api.lims.leg.bc.ca/public/images/mla-headshots/43/small/';
+
+// ─────────────────────────────────────────────
+// DATA  (photo = filename in PHOTO_BASE; null = show initials)
+// ─────────────────────────────────────────────
+const MLAS = [
+  // ── NDP ──────────────────────────────────────────────────────────
+  { id:1,  lastName:"Eby",             firstName:"David",      riding:"Vancouver-Point Grey",        electedParty:"NDP", currentParty:"NDP", firstElected:2013, changeNote:null, role:"Premier",          photo:"Eby-David.jpg" },
+  { id:2,  lastName:"Farnworth",       firstName:"Mike",       riding:"Port Coquitlam",              electedParty:"NDP", currentParty:"NDP", firstElected:1991, changeNote:null, role:"House Leader",      photo:"Farnworth-Mike.jpg" },
+  { id:3,  lastName:"Chouhan",         firstName:"Raj",        riding:"Burnaby-New Westminster",     electedParty:"NDP", currentParty:"NDP", firstElected:2005, changeNote:null, role:"Speaker",           photo:"Chouhan-Raj.jpg" },
+  { id:4,  lastName:"Anderson",        firstName:"Brittny",    riding:"Kootenay Central",            electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Anderson-Brittny.jpg" },
+  { id:5,  lastName:"Anderson",        firstName:"George",     riding:"Nanaimo-Lantzville",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"George_Anderson_MLA%20Cropped.jpg" },
+  { id:6,  lastName:"Arora",           firstName:"Reah",       riding:"Burnaby East",                electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Arora-Rohini.jpg" },
+  { id:7,  lastName:"Bailey",          firstName:"Brenda",     riding:"Vancouver-South Granville",   electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Bailey-Brenda.jpg" },
+  { id:8,  lastName:"Beare",           firstName:"Lisa",       riding:"Maple Ridge-Pitt Meadows",    electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Beare-Lisa.jpg" },
+  { id:9,  lastName:"Begg",            firstName:"Garry",      riding:"Surrey-Guildford",            electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Begg-Garry.jpg" },
+  { id:10, lastName:"Blatherwick",     firstName:"Jennifer",   riding:"Coquitlam-Maillardville",     electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Blatherwick-Jennifer.jpg" },
+  { id:11, lastName:"Boultbee",        firstName:"Amelia",     riding:"Penticton-Summerland",        electedParty:"Conservative", currentParty:"NDP", firstElected:2024, changeNote:"Oct 20/25 – Left Con caucus; Jul 3/26 – Joined NDP caucus", role:null, photo:"Boultbee-Amelia.jpg" },
+  { id:12, lastName:"Boyle",           firstName:"Christine",  riding:"Vancouver-Little Mountain",   electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Boyle-Christine.jpg" },
+  { id:13, lastName:"Brar",            firstName:"Jagrup",     riding:"Surrey-Fleetwood",            electedParty:"NDP", currentParty:"NDP", firstElected:2004, changeNote:null, role:null,                photo:"Brar-Jagrup.jpg" },
+  { id:14, lastName:"Chandra Herbert", firstName:"Spencer",    riding:"Vancouver-West End",          electedParty:"NDP", currentParty:"NDP", firstElected:2008, changeNote:null, role:null,                photo:"Chandra-Herbert-Spencer.jpg" },
+  { id:15, lastName:"Chant",           firstName:"Susie",      riding:"North Vancouver-Seymour",     electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Chant-Susie.jpg" },
+  { id:16, lastName:"Choi",            firstName:"Paul",       riding:"Burnaby South-Metrotown",     electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Choi-Paul.jpg" },
+  { id:17, lastName:"Chow",            firstName:"George",     riding:"Vancouver-Fraserview",        electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Chow-George.jpg" },
+  { id:18, lastName:"Davidson",        firstName:"Tamara",     riding:"North Coast-Haida Gwaii",     electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Davidson-Tamara.jpg" },
+  { id:19, lastName:"Dhir",            firstName:"Sunita",     riding:"Vancouver-Langara",           electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Dhir,%20Sunita.JPG" },
+  { id:20, lastName:"Dix",             firstName:"Adrian",     riding:"Vancouver-Renfrew",           electedParty:"NDP", currentParty:"NDP", firstElected:2005, changeNote:null, role:null,                photo:"Dix-Adrian.jpg" },
+  { id:21, lastName:"Elmore",          firstName:"Mable",      riding:"Vancouver-Kensington",        electedParty:"NDP", currentParty:"NDP", firstElected:2009, changeNote:null, role:"Deputy Speaker",    photo:"Elmore-Mable.jpg" },
+  { id:22, lastName:"Gibson",          firstName:"Diana",      riding:"Oak Bay-Gordon Head",         electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Gibson-Diana.jpg" },
+  { id:23, lastName:"Glumac",          firstName:"Rick",       riding:"Port Moody-Burquitlam",       electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Glumac-Rick.jpg" },
+  { id:24, lastName:"Greene",          firstName:"Kelly",      riding:"Richmond-Steveston",          electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Greene-Kelly.jpg" },
+  { id:25, lastName:"Higginson",       firstName:"Stephanie",  riding:"Ladysmith-Oceanside",         electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Higginson-Stephanie.jpg" },
+  { id:26, lastName:"Kahlon",          firstName:"Ravi",       riding:"Delta North",                 electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Kahlon-Ravi.jpg" },
+  { id:27, lastName:"Kang",            firstName:"Anne",       riding:"Burnaby Centre",              electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Kang-Anne.jpg" },
+  { id:28, lastName:"Krieger",         firstName:"Nina",       riding:"Victoria-Swan Lake",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Krieger-Nina.jpg" },
+  { id:29, lastName:"Lajeunesse",      firstName:"Dana",       riding:"Juan de Fuca-Malahat",        electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Lajeunesse-Dana.jpg" },
+  { id:30, lastName:"Lore",            firstName:"Grace",      riding:"Victoria-Beacon Hill",        electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Lore-Grace.jpg" },
+  { id:31, lastName:"Ma",              firstName:"Bowinn",     riding:"North Vancouver-Lonsdale",    electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Ma-Bowinn.jpg" },
+  { id:32, lastName:"Malcolmson",      firstName:"Sheila",     riding:"Nanaimo-Gabriola Island",     electedParty:"NDP", currentParty:"NDP", firstElected:2019, changeNote:null, role:null,                photo:"Malcolmson-Sheila.jpg" },
+  { id:33, lastName:"Morissette",      firstName:"Steve",      riding:"Kootenay-Monashee",           electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Morissette-Steve.jpg" },
+  { id:34, lastName:"Neill",           firstName:"Randene",    riding:"Powell River-Sunshine Coast", electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Neill-Randene.jpg" },
+  { id:35, lastName:"Osborne",         firstName:"Josie",      riding:"Mid Island-Pacific Rim",      electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Osborne-Josie.jpg" },
+  { id:36, lastName:"Parmar",          firstName:"Ravi",       riding:"Langford-Highlands",          electedParty:"NDP", currentParty:"NDP", firstElected:2023, changeNote:null, role:null,                photo:"Parmar-Ravi.jpg" },
+  { id:37, lastName:"Rotchford",       firstName:"Darlene",    riding:"Esquimalt-Colwood",           electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Rotchford-Darlene.jpg" },
+  { id:38, lastName:"Routledge",       firstName:"Janet",      riding:"Burnaby North",               electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:"Whip",              photo:"Routledge-Janet.jpg" },
+  { id:39, lastName:"Sandhu",          firstName:"Harwinder",  riding:"Vernon-Lumby",                electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Sandhu-Harwinder.jpg" },
+  { id:40, lastName:"Shah",            firstName:"Amna",       riding:"Surrey City Centre",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Shah-Amna.jpg" },
+  { id:41, lastName:"Sharma",          firstName:"Niki",       riding:"Vancouver-Hastings",          electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Sharma-Niki.jpg" },
+  { id:42, lastName:"Sunner",          firstName:"Jessie",     riding:"Surrey-Newton",               electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Sunner-Jessie.jpg" },
+  { id:43, lastName:"Toporowski",      firstName:"Debra",      riding:"Cowichan Valley",             electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Toporowski-Debra.jpg" },
+  { id:44, lastName:"Whiteside",       firstName:"Jennifer",   riding:"New Westminster-Coquitlam",   electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Whiteside-Jennifer.jpg" },
+  { id:45, lastName:"Wickens",         firstName:"Jodie",      riding:"Coquitlam-Burke Mountain",    electedParty:"NDP", currentParty:"NDP", firstElected:2016, changeNote:null, role:null,                photo:"Wickens-Jodie.jpg" },
+  { id:46, lastName:"Yung",            firstName:"Terry",      riding:"Vancouver-Yaletown",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Yung-Terry.jpg" },
+  { id:92, lastName:"Popham",          firstName:"Lana",       riding:"Saanich South",               electedParty:"NDP", currentParty:"NDP", firstElected:2009, changeNote:null, role:null,                photo:"Popham-Lana.jpg" },
+
+  // ── CONSERVATIVE ────────────────────────────────────────────────
+  { id:47, lastName:"Bhangu",          firstName:"Harman",     riding:"Langley-Abbotsford",          electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Bhangu-Harman.jpg" },
+  { id:49, lastName:"Chapman",         firstName:"Brent",      riding:"Surrey South",                electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Chapman-Brent.jpg" },
+  { id:50, lastName:"Clare",           firstName:"Sheldon",    riding:"Prince George-North Cariboo", electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:"Opp. House Leader",       photo:"Clare-Sheldon.jpg" },
+  { id:51, lastName:"Davis",           firstName:"Pete",       riding:"Kootenay-Rockies",            electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Davis-Pete.jpg" },
+  { id:52, lastName:"Dew",             firstName:"Gavin",      riding:"Kelowna-Mission",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Dew-Gavin.jpg" },
+  { id:53, lastName:"Dhaliwal",        firstName:"Mandeep",    riding:"Surrey North",                electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Dhaliwal-Mandeep.jpg" },
+  { id:54, lastName:"Doerkson",        firstName:"Lorne",      riding:"Cariboo-Chilcotin",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2020, changeNote:null, role:"Asst. Deputy Speaker",    photo:"Doerkson-Lorne.jpg" },
+  { id:55, lastName:"Giddens",         firstName:"Kiel",       riding:"Prince George-Mackenzie",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Giddens-Kiel.jpeg" },
+  { id:56, lastName:"Halford",         firstName:"Trevor",     riding:"Surrey-White Rock",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2020, changeNote:"Interim Opposition leader Dec 4/25 – Jun 29/26", role:null, photo:"Halford-Trevor.jpg" },
+  { id:57, lastName:"Hartwell",        firstName:"Sharon",     riding:"Bulkley Valley-Stikine",      electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Hartwell-Sharon.jpg" },
+  { id:58, lastName:"Hepner",          firstName:"Linda",      riding:"Surrey-Serpentine River",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Hepner-Linda.jpg" },
+  { id:59, lastName:"Kindy",           firstName:"Anna",       riding:"North Island",                electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Anna%20Kindy%20Conservative%20Party%20_KRL_20241210__AVE7843%20copy.jpg" },
+  { id:60, lastName:"Kooner",          firstName:"Steve",      riding:"Richmond-Queensborough",      electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"MLA%20Kooner.jpg" },
+  { id:61, lastName:"Loewen",          firstName:"Kristina",   riding:"Kelowna Centre",              electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Cropped%20Resized_Kris_Andrew_Lowen_Large__(3)_1705686567421.JPG" },
+  { id:62, lastName:"Luck",            firstName:"Tony",       riding:"Fraser-Nicola",               electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Luck-Tony.jpeg" },
+  { id:63, lastName:"Maahs",           firstName:"Heather",    riding:"Chilliwack North",            electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:"Opposition Leader",        photo:"Heather%20Maahs%20Updated%20Photo.jpeg" },
+  { id:64, lastName:"McCall",          firstName:"Macklin",    riding:"West Kelowna-Peachland",      electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"McCall.PNG" },
+  { id:65, lastName:"McInnis",         firstName:"Scott",      riding:"Columbia River-Revelstoke",   electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"McInnis-Scott.jpg" },
+  { id:66, lastName:"Mok",             firstName:"Lawrence",   riding:"Maple Ridge East",            electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Mok-Lawrence.jpg" },
+  { id:67, lastName:"Neufeld",         firstName:"Korky",      riding:"Abbotsford West",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Neufeld-Korky.jpg" },
+  { id:68, lastName:"Neufeld",         firstName:"Larry",      riding:"Peace River South",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Neufeld-Larry.jpeg" },
+  { id:69, lastName:"Rattée",     firstName:"Claire",     riding:"Skeena",                      electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Claire%20Ratee%20Cropped.jpg" },
+  { id:70, lastName:"Rustad",          firstName:"John",       riding:"Nechako Lakes",               electedParty:"Conservative", currentParty:"Conservative", firstElected:2005, changeNote:"Former Opposition leader; not seeking re-election", role:null, photo:"Rustad-John.jpg" },
+  { id:71, lastName:"Stamer",          firstName:"Ward",       riding:"Kamloops-North Thompson",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Ward%20Stamer.PNG" },
+  { id:72, lastName:"Tepper",          firstName:"Bryan",      riding:"Surrey-Panorama",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Bryan%20Portrait%201%20(2).jpg" },
+  { id:73, lastName:"Toor",            firstName:"Jody",       riding:"Langley-Willowbrook",         electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Toor-Jody.jpg" },
+  { id:74, lastName:"Van Popta",       firstName:"Misty",      riding:"Langley-Walnut Grove",        electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Van%20Popta-Misty.jpg" },
+  { id:75, lastName:"Warbus",          firstName:"Á'a:líya", riding:"Chilliwack-Cultus Lake", electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,               photo:"A'aliya%20Warbus.jpg" },
+  { id:76, lastName:"Williams",        firstName:"David",      riding:"Salmon Arm-Shuswap",          electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Williams-David.jpg" },
+  { id:77, lastName:"Wilson",          firstName:"Donegal",    riding:"Boundary-Similkameen",        electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Wilson-Donegal.jpg" },
+  { id:93, lastName:"Block",           firstName:"Lynne",      riding:"West Vancouver-Capilano",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"LBlock-Headshot-Preferred%20(1).jpg" },
+
+  // ── GREEN ────────────────────────────────────────────────────────
+  { id:78, lastName:"Botterell",       firstName:"Rob",        riding:"Saanich North and the Islands", electedParty:"Green", currentParty:"Green", firstElected:2024, changeNote:null, role:"House Leader",       photo:"Botterell-Rob.jpg" },
+  { id:79, lastName:"Valeriote",       firstName:"Jeremy",     riding:"West Vancouver-Sea to Sky",   electedParty:"Green", currentParty:"Green", firstElected:2024, changeNote:null, role:"Parliamentary Leader", photo:"Valeriote-Jeremy.jpg" },
+
+  // ── ONEBC ────────────────────────────────────────────────────────
+  { id:80, lastName:"Brodie",          firstName:"Dallas",     riding:"Vancouver-Quilchena",         electedParty:"Conservative", currentParty:"OneBC", firstElected:2024, changeNote:"Mar 7/25 – Removed from Con caucus; Jun 9/25 – Founded OneBC; Dec 21/25 – Rejoined as OneBC leader", role:"OneBC Leader", photo:"Brodie-Dallas.png" },
+
+  // ── INDEPENDENT ─────────────────────────────────────────────────
+  { id:81, lastName:"Armstrong",       firstName:"Tara",       riding:"Kelowna-Lake Country-Coldstream", electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 7/25 – Left Con caucus; Jun 9/25 – Co-founded OneBC; Dec 16/25 – Left OneBC", role:null, photo:"MLA%20Armstrong%20Headshot.jpeg" },
+  { id:82, lastName:"Banman",          firstName:"Bruce",      riding:"Abbotsford South",            electedParty:"Conservative", currentParty:"Independent", firstElected:2020, changeNote:"Aug 27/26 – Left Conservative caucus", role:null,                                              photo:"Banman-Bruce.jpg" },
+  { id:83, lastName:"Chan",            firstName:"Hon",        riding:"Richmond Centre",             electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 26/26 – Removed from Conservative caucus", role:null,                                      photo:"Chan-Hon.jpg" },
+  { id:84, lastName:"Day",             firstName:"Brennan",    riding:"Courtenay-Comox",             electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Day-Brennan.jpg" },
+  { id:85, lastName:"Kealy",           firstName:"Jordan",     riding:"Peace River North",           electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 7/25 – Left Conservative caucus", role:null,                                              photo:"Kealy-Jordan.jpg" },
+  { id:86, lastName:"Milobar",         firstName:"Peter",      riding:"Kamloops Centre",             electedParty:"Conservative", currentParty:"Independent", firstElected:2017, changeNote:"Aug 14/26 – Left Conservative caucus", role:null,                                              photo:"Milobar-Peter.jpg" },
+  { id:87, lastName:"Paton",           firstName:"Ian",        riding:"Delta South",                 electedParty:"Conservative", currentParty:"Independent", firstElected:2017, changeNote:"Aug 24/26 – Left Conservative caucus", role:null,                                              photo:"Paton-Ian.jpg" },
+  { id:88, lastName:"Sturko",          firstName:"Elenore",    riding:"Surrey-Cloverdale",           electedParty:"Conservative", currentParty:"Independent", firstElected:2022, changeNote:"Sep 22/25 – Removed from Conservative caucus", role:null,                                      photo:"Sturko-Elenore.jpg" },
+  { id:48, lastName:"Bird",            firstName:"Rosalyn",    riding:"Prince George-Valemount",     electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Aug 25/26 – Left Conservative caucus", role:null,                                              photo:"Rosalyn%20Bird%20Conservative%20Party%20_KRL_20241210__AVE7919%20copy%202.jpg" },
+  { id:89, lastName:"Wat",             firstName:"Teresa",     riding:"Richmond-Bridgeport",         electedParty:"Conservative", currentParty:"Independent", firstElected:2013, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Wat-Teresa.jpg" },
+
+  // ── VACANT ──────────────────────────────────────────────────────
+  { id:90, lastName:"(Vacant)",        firstName:"",           riding:"Abbotsford-Mission",          electedParty:"Conservative", currentParty:"Vacant", firstElected:null, changeNote:"Reann Gasper (Con) resigned Aug 22/26; by-election pending", role:null, photo:null },
+  { id:91, lastName:"(Vacant)",        firstName:"",           riding:"Vancouver-Strathcona",        electedParty:"NDP",          currentParty:"Vacant", firstElected:null, changeNote:"Joan Phillip (NDP) died in office Aug 28/26",               role:null, photo:"Phillip-Joan.jpg" },
+];
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+const PARTY_KEY = {
+  "NDP":"ndp","Conservative":"con","Green":"grn",
+  "OneBC":"onebc","Independent":"ind","Vacant":"vac"
+};
+const PARTY_LABEL = {
+  "NDP":"BC NDP","Conservative":"Conservative","Green":"BC Greens",
+  "OneBC":"OneBC","Independent":"Independent","Vacant":"Vacant"
+};
+const PARTY_ORDER  = ["NDP","Conservative","Green","OneBC","Independent","Vacant"];
+const PARTY_COLORS = {
+  "NDP":"#E8721A","Conservative":"#003F8C","Green":"#2E7D32",
+  "OneBC":"#7B1FA2","Independent":"#546E7A","Vacant":"#9E9E9E"
+};
+
+function initials(m) {
+  if (!m.firstName) return "–";
+  return (m.firstName[0] + m.lastName[0]).toUpperCase();
+}
+function partyKey(p) { return PARTY_KEY[p] || "ind"; }
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let activeFilters = new Set(["NDP","Conservative","Green","OneBC","Independent","Vacant"]);
+let sortMode = "caucus-alpha";
+
+// ─────────────────────────────────────────────
+// SEAT COUNTS
+// ─────────────────────────────────────────────
+function seatCounts() {
+  const c = {};
+  MLAS.forEach(m => { c[m.currentParty] = (c[m.currentParty]||0)+1; });
+  return c;
+}
+
+function renderHeaderPills() {
+  const counts = seatCounts();
+  const pills = document.getElementById("seatPills");
+  const bar   = document.getElementById("propBar");
+  const total = MLAS.length;
+  pills.innerHTML = bar.innerHTML = "";
+  PARTY_ORDER.forEach(p => {
+    if (!counts[p]) return;
+    const key  = partyKey(p);
+    const abbr = {NDP:"NDP",Conservative:"Con",Green:"Green",OneBC:"OneBC",Independent:"Ind.",Vacant:"Vacant"}[p];
+    pills.innerHTML += `<span class="pill ${key}" title="${PARTY_LABEL[p]}"><span class="pill-count">${counts[p]}</span> ${abbr}</span>`;
+    bar.innerHTML   += `<span style="width:${(counts[p]/total*100).toFixed(2)}%;background:${PARTY_COLORS[p]};opacity:.8"></span>`;
+  });
+}
+
+// ─────────────────────────────────────────────
+// FILTER BUTTONS
+// ─────────────────────────────────────────────
+function renderFilterButtons() {
+  const counts = seatCounts();
+  const grp    = document.getElementById("filterGroup");
+  grp.innerHTML = "";
+  const abbr = {NDP:"NDP",Conservative:"Conservative",Green:"Green",OneBC:"OneBC",Independent:"Independent",Vacant:"Vacant"};
+  PARTY_ORDER.forEach(p => {
+    const key  = partyKey(p);
+    const cnt  = counts[p] || 0;
+    const btn  = document.createElement("button");
+    btn.className    = `filter-btn ${key}${activeFilters.has(p)?" active":""}`;
+    btn.textContent  = `${abbr[p]} (${cnt})`;
+    btn.dataset.party = p;
+    btn.addEventListener("click", () => {
+      if (activeFilters.has(p)) { if (activeFilters.size > 1) activeFilters.delete(p); }
+      else activeFilters.add(p);
+      renderFilterButtons(); renderCards();
+    });
+    grp.appendChild(btn);
+  });
+}
+
+// ─────────────────────────────────────────────
+// SORT
+// ─────────────────────────────────────────────
+function sortedMlas(list) {
+  const copy = [...list];
+  switch(sortMode) {
+    case "caucus-alpha": return copy.sort((a,b) => {
+      const ao = PARTY_ORDER.indexOf(a.currentParty);
+      const bo = PARTY_ORDER.indexOf(b.currentParty);
+      if (ao !== bo) return ao - bo;
+      return a.lastName.localeCompare(b.lastName);
+    });
+    case "alpha":             return copy.sort((a,b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName));
+    case "riding":            return copy.sort((a,b) => a.riding.localeCompare(b.riding));
+    case "first-elected-asc": return copy.sort((a,b) => (a.firstElected||9999)-(b.firstElected||9999) || a.lastName.localeCompare(b.lastName));
+    case "first-elected-desc":return copy.sort((a,b) => (b.firstElected||0)-(a.firstElected||0) || a.lastName.localeCompare(b.lastName));
+    default: return copy;
+  }
+}
+
+// ─────────────────────────────────────────────
+// CARD RENDER
+// ─────────────────────────────────────────────
+function cardHTML(m) {
+  const key      = partyKey(m.currentParty);
+  const isVacant = m.currentParty === "Vacant";
+  const ini      = isVacant ? "–" : initials(m);
+  const photoURL = m.photo ? PHOTO_BASE + m.photo : null;
+
+  // Avatar: photo + initials fallback
+  const imgTag = photoURL
+    ? `<img src="${photoURL}" alt="${m.firstName} ${m.lastName}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : "";
+  const initSpan = `<span class="init" style="display:${photoURL ? 'none' : 'flex'};width:100%;height:100%;align-items:center;justify-content:center">${ini}</span>`;
+
+  let badges = `<span class="party-badge ${key}">${PARTY_LABEL[m.currentParty]}</span>`;
+  if (m.firstElected) badges += `<span class="elected-badge">First elected ${m.firstElected}</span>`;
+  if (m.role)         badges += `<span class="role-badge">${m.role}</span>`;
+
+  const changeHTML = m.changeNote ? `<div class="change-note">${m.changeNote}</div>` : "";
+
+  return `
+    <div class="mla-card${isVacant?" is-vacant":""}" data-party="${m.currentParty}">
+      <div class="party-stripe ${key}"></div>
+      <div class="card-inner">
+        <div class="card-top">
+          <div class="avatar ${key}">${imgTag}${initSpan}</div>
+          <div class="card-identity">
+            <div class="mla-name">${m.firstName ? m.firstName+" "+m.lastName : m.lastName}</div>
+            <div class="mla-riding">${m.riding}</div>
+          </div>
+          <div class="card-badges">${badges}</div>
+        </div>
+        ${changeHTML}
+      </div>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────
+// MAIN RENDER
+// ─────────────────────────────────────────────
+function renderCards() {
+  const main    = document.getElementById("mainContent");
+  const empty   = document.getElementById("emptyState");
+  const countEl = document.getElementById("resultCount");
+
+  const visible = MLAS.filter(m => activeFilters.has(m.currentParty));
+  const sorted  = sortedMlas(visible);
+  countEl.textContent = `${sorted.length} of ${MLAS.length} MLAs`;
+
+  if (sorted.length === 0) {
+    main.innerHTML = ""; main.appendChild(empty); empty.classList.add("visible"); return;
+  }
+  empty.classList.remove("visible");
+
+  let html = "";
+  if (sortMode === "caucus-alpha") {
+    PARTY_ORDER.forEach(party => {
+      if (!activeFilters.has(party)) return;
+      const group = sorted.filter(m => m.currentParty === party);
+      if (!group.length) return;
+      html += `<div class="caucus-section">
+        <div class="caucus-heading">
+          <div class="caucus-heading-stripe" style="background:${PARTY_COLORS[party]}"></div>
+          <h2>${PARTY_LABEL[party]}</h2>
+          <span class="caucus-count">${group.length} seat${group.length!==1?"s":""}</span>
+        </div>
+        <div class="mla-grid">${group.map(cardHTML).join("")}</div>
+      </div>`;
+    });
+  } else {
+    html = `<div class="mla-grid">${sorted.map(cardHTML).join("")}</div>`;
+  }
+
+  main.innerHTML = "";
+  main.insertAdjacentHTML("beforeend", html);
+  main.appendChild(empty);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+document.getElementById("sortSelect").addEventListener("change", e => {
+  sortMode = e.target.value; renderCards();
+});
+renderHeaderPills();
+renderFilterButtons();
+renderCards();
+</script>
+</body>
+</html>
