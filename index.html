@@ -288,6 +288,13 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
   background: var(--bg); border: 1px solid var(--border);
   padding: 2px 7px; border-radius: 20px; line-height: 1.5;
 }
+.fmr-badge {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: .04em;
+  padding: 2px 6px; border-radius: 20px; text-transform: uppercase; line-height: 1.5;
+  color: #fff;
+}
+.fmr-badge.bccon { background: #003F8C; }
+.fmr-badge.bclib { background: #B71C1C; }
 .role-badge {
   font-size: 0.62rem; font-weight: 600; color: #7A5800;
   background: #FFF8E1; border: 1px solid #FFD54F;
@@ -353,7 +360,7 @@ footer {
   <div class="header-inner">
     <div class="site-brand">
       <div class="site-name">BC MLA Tracker</div>
-      <div class="site-meta">43rd Parliament &middot; Updated Sep 1, 2026</div>
+      <div class="site-meta">43rd Parliament &middot; Updated Sep 2, 2026</div>
     </div>
     <div class="seat-bar-wrap">
       <div class="seat-pills" id="seatPills"></div>
@@ -447,11 +454,11 @@ const MLAS = [
   { id:49, lastName:"Chapman",         firstName:"Brent",      riding:"Surrey South",                electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Chapman-Brent.jpg" },
   { id:50, lastName:"Clare",           firstName:"Sheldon",    riding:"Prince George-North Cariboo", electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:"Opp. House Leader",       photo:"Clare-Sheldon.jpg" },
   { id:51, lastName:"Davis",           firstName:"Pete",       riding:"Kootenay-Rockies",            electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Davis-Pete.jpg" },
-  { id:52, lastName:"Dew",             firstName:"Gavin",      riding:"Kelowna-Mission",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Dew-Gavin.jpg" },
+  { id:52, lastName:"Dew",             firstName:"Gavin",      riding:"Kelowna-Mission",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Dew-Gavin.jpg", fmrBCLib:true },
   { id:53, lastName:"Dhaliwal",        firstName:"Mandeep",    riding:"Surrey North",                electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Dhaliwal-Mandeep.jpg" },
-  { id:54, lastName:"Doerkson",        firstName:"Lorne",      riding:"Cariboo-Chilcotin",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2020, changeNote:null, role:"Asst. Deputy Speaker",    photo:"Doerkson-Lorne.jpg" },
+  { id:54, lastName:"Doerkson",        firstName:"Lorne",      riding:"Cariboo-Chilcotin",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2020, changeNote:null, role:"Asst. Deputy Speaker",    photo:"Doerkson-Lorne.jpg", fmrBCLib:true },
   { id:55, lastName:"Giddens",         firstName:"Kiel",       riding:"Prince George-Mackenzie",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Giddens-Kiel.jpeg" },
-  { id:56, lastName:"Halford",         firstName:"Trevor",     riding:"Surrey-White Rock",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2020, changeNote:"Interim Opposition leader Dec 4/25 – Jun 29/26", role:null, photo:"Halford-Trevor.jpg" },
+  { id:56, lastName:"Halford",         firstName:"Trevor",     riding:"Surrey-White Rock",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2020, changeNote:"Interim Opposition leader Dec 4/25 – Jun 29/26", role:null, photo:"Halford-Trevor.jpg", fmrBCLib:true },
   { id:57, lastName:"Hartwell",        firstName:"Sharon",     riding:"Bulkley Valley-Stikine",      electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Hartwell-Sharon.jpg" },
   { id:58, lastName:"Hepner",          firstName:"Linda",      riding:"Surrey-Serpentine River",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Hepner-Linda.jpg" },
   { id:59, lastName:"Kindy",           firstName:"Anna",       riding:"North Island",                electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Anna%20Kindy%20Conservative%20Party%20_KRL_20241210__AVE7843%20copy.jpg" },
@@ -460,19 +467,19 @@ const MLAS = [
   { id:62, lastName:"Luck",            firstName:"Tony",       riding:"Fraser-Nicola",               electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Luck-Tony.jpeg" },
   { id:63, lastName:"Maahs",           firstName:"Heather",    riding:"Chilliwack North",            electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:"Opposition Leader",        photo:"Heather%20Maahs%20Updated%20Photo.jpeg" },
   { id:64, lastName:"McCall",          firstName:"Macklin",    riding:"West Kelowna-Peachland",      electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"McCall.PNG" },
-  { id:65, lastName:"McInnis",         firstName:"Scott",      riding:"Columbia River-Revelstoke",   electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"McInnis-Scott.jpg" },
+  { id:65, lastName:"McInnis",         firstName:"Scott",      riding:"Columbia River-Revelstoke",   electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:'Sep 2/26 – <a href="https://www.cbc.ca/news/canada/british-columbia/conservative-mla-steps-down-9.7329679" target="_blank" rel="noopener">Left Conservative caucus</a>', role:null, photo:"McInnis-Scott.jpg", fmrBCLib:true },
   { id:66, lastName:"Mok",             firstName:"Lawrence",   riding:"Maple Ridge East",            electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Mok-Lawrence.jpg" },
   { id:67, lastName:"Neufeld",         firstName:"Korky",      riding:"Abbotsford West",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Neufeld-Korky.jpg" },
   { id:68, lastName:"Neufeld",         firstName:"Larry",      riding:"Peace River South",           electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Neufeld-Larry.jpeg" },
   { id:69, lastName:"Rattée",     firstName:"Claire",     riding:"Skeena",                      electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Claire%20Ratee%20Cropped.jpg" },
-  { id:70, lastName:"Rustad",          firstName:"John",       riding:"Nechako Lakes",               electedParty:"Conservative", currentParty:"Conservative", firstElected:2005, changeNote:"Former Opposition leader; not seeking re-election", role:null, photo:"Rustad-John.jpg" },
+  { id:70, lastName:"Rustad",          firstName:"John",       riding:"Nechako Lakes",               electedParty:"Conservative", currentParty:"Conservative", firstElected:2005, changeNote:"Former Opposition leader; not seeking re-election", role:null, photo:"Rustad-John.jpg", fmrBCLib:true },
   { id:71, lastName:"Stamer",          firstName:"Ward",       riding:"Kamloops-North Thompson",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Ward%20Stamer.PNG" },
   { id:72, lastName:"Tepper",          firstName:"Bryan",      riding:"Surrey-Panorama",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Bryan%20Portrait%201%20(2).jpg" },
   { id:73, lastName:"Toor",            firstName:"Jody",       riding:"Langley-Willowbrook",         electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Toor-Jody.jpg" },
   { id:74, lastName:"Van Popta",       firstName:"Misty",      riding:"Langley-Walnut Grove",        electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Van%20Popta-Misty.jpg" },
   { id:75, lastName:"Warbus",          firstName:"Á'a:líya", riding:"Chilliwack-Cultus Lake", electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:'Aug 31/26 – <a href="https://x.com/RobShaw_BC/status/2094453080859558047" target="_blank" rel="noopener">Left Conservative caucus</a>', role:null, photo:"A'aliya%20Warbus.jpg" },
   { id:76, lastName:"Williams",        firstName:"David",      riding:"Salmon Arm-Shuswap",          electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Williams-David.jpg" },
-  { id:77, lastName:"Wilson",          firstName:"Donegal",    riding:"Boundary-Similkameen",        electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Wilson-Donegal.jpg" },
+  { id:77, lastName:"Wilson",          firstName:"Donegal",    riding:"Boundary-Similkameen",        electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:'Sep 2/26 – <a href="https://www.cbc.ca/news/canada/british-columbia/conservative-mla-steps-down-9.7329679" target="_blank" rel="noopener">Left Conservative caucus</a>', role:null, photo:"Wilson-Donegal.jpg" },
   { id:93, lastName:"Block",           firstName:"Lynne",      riding:"West Vancouver-Capilano",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"LBlock-Headshot-Preferred%20(1).jpg" },
 
   // ── GREEN ────────────────────────────────────────────────────────
@@ -484,15 +491,15 @@ const MLAS = [
 
   // ── INDEPENDENT ─────────────────────────────────────────────────
   { id:81, lastName:"Armstrong",       firstName:"Tara",       riding:"Kelowna-Lake Country-Coldstream", electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 7/25 – Left Con caucus; Jun 9/25 – Co-founded OneBC; Dec 16/25 – Left OneBC", role:null, photo:"MLA%20Armstrong%20Headshot.jpeg" },
-  { id:82, lastName:"Banman",          firstName:"Bruce",      riding:"Abbotsford South",            electedParty:"Conservative", currentParty:"Independent", firstElected:2020, changeNote:"Aug 27/26 – Left Conservative caucus", role:null,                                              photo:"Banman-Bruce.jpg" },
+  { id:82, lastName:"Banman",          firstName:"Bruce",      riding:"Abbotsford South",            electedParty:"Conservative", currentParty:"Independent", firstElected:2020, changeNote:"Aug 27/26 – Left Conservative caucus", role:null,                                              photo:"Banman-Bruce.jpg", fmrBCLib:true },
   { id:83, lastName:"Chan",            firstName:"Hon",        riding:"Richmond Centre",             electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 26/26 – Removed from Conservative caucus", role:null,                                      photo:"Chan-Hon.jpg" },
-  { id:84, lastName:"Day",             firstName:"Brennan",    riding:"Courtenay-Comox",             electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Day-Brennan.jpg" },
+  { id:84, lastName:"Day",             firstName:"Brennan",    riding:"Courtenay-Comox",             electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Day-Brennan.jpg", fmrBCLib:true },
   { id:85, lastName:"Kealy",           firstName:"Jordan",     riding:"Peace River North",           electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 7/25 – Left Conservative caucus", role:null,                                              photo:"Kealy-Jordan.jpg" },
   { id:86, lastName:"Milobar",         firstName:"Peter",      riding:"Kamloops Centre",             electedParty:"Conservative", currentParty:"Independent", firstElected:2017, changeNote:"Aug 14/26 – Left Conservative caucus", role:null,                                              photo:"Milobar-Peter.jpg" },
-  { id:87, lastName:"Paton",           firstName:"Ian",        riding:"Delta South",                 electedParty:"Conservative", currentParty:"Independent", firstElected:2017, changeNote:"Aug 24/26 – Left Conservative caucus", role:null,                                              photo:"Paton-Ian.jpg" },
-  { id:88, lastName:"Sturko",          firstName:"Elenore",    riding:"Surrey-Cloverdale",           electedParty:"Conservative", currentParty:"Independent", firstElected:2022, changeNote:"Sep 22/25 – Removed from Conservative caucus", role:null,                                      photo:"Sturko-Elenore.jpg" },
+  { id:87, lastName:"Paton",           firstName:"Ian",        riding:"Delta South",                 electedParty:"Conservative", currentParty:"Independent", firstElected:2017, changeNote:"Aug 24/26 – Left Conservative caucus", role:null,                                              photo:"Paton-Ian.jpg", fmrBCLib:true },
+  { id:88, lastName:"Sturko",          firstName:"Elenore",    riding:"Surrey-Cloverdale",           electedParty:"Conservative", currentParty:"Independent", firstElected:2022, changeNote:"Sep 22/25 – Removed from Conservative caucus", role:null,                                      photo:"Sturko-Elenore.jpg", fmrBCLib:true },
   { id:48, lastName:"Bird",            firstName:"Rosalyn",    riding:"Prince George-Valemount",     electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Aug 25/26 – Left Conservative caucus", role:null,                                              photo:"Rosalyn%20Bird%20Conservative%20Party%20_KRL_20241210__AVE7919%20copy%202.jpg" },
-  { id:89, lastName:"Wat",             firstName:"Teresa",     riding:"Richmond-Bridgeport",         electedParty:"Conservative", currentParty:"Independent", firstElected:2013, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Wat-Teresa.jpg" },
+  { id:89, lastName:"Wat",             firstName:"Teresa",     riding:"Richmond-Bridgeport",         electedParty:"Conservative", currentParty:"Independent", firstElected:2013, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Wat-Teresa.jpg", fmrBCLib:true },
 
   // ── VACANT ──────────────────────────────────────────────────────
   { id:90, lastName:"(Vacant)",        firstName:"",           riding:"Abbotsford-Mission",          electedParty:"Conservative", currentParty:"Vacant", firstElected:null, changeNote:"Reann Gasper (Con) resigned Aug 22/26; by-election pending", role:null, photo:null },
@@ -614,6 +621,9 @@ function cardHTML(m) {
   let badges = `<span class="party-badge ${key}">${PARTY_LABEL[m.currentParty]}</span>`;
   if (m.firstElected) badges += `<span class="elected-badge">First elected ${m.firstElected}</span>`;
   if (m.role)         badges += `<span class="role-badge">${m.role}</span>`;
+  if (m.electedParty === "Conservative" && m.currentParty !== "Conservative")
+    badges += `<span class="fmr-badge bccon">Fmr BCCon</span>`;
+  if (m.fmrBCLib)     badges += `<span class="fmr-badge bclib">Fmr BCLib</span>`;
 
   const changeHTML = m.changeNote
     ? `<div class="change-note">${m.changeNote.split("; ").join("<br>")}</div>`
