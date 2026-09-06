@@ -24,6 +24,7 @@
   --con:   #003F8C;
   --grn:   #2E7D32;
   --onebc: #7B1FA2;
+  --unm:   #00695C;
   --ind:   #546E7A;
   --vac:   #9E9E9E;
 
@@ -31,6 +32,7 @@
   --con-bg:   #E8EEF7;
   --grn-bg:   #E8F5E9;
   --onebc-bg: #F3E5F5;
+  --unm-bg:   #E0F2F1;
   --ind-bg:   #ECEFF1;
   --vac-bg:   #F5F5F5;
 }
@@ -48,6 +50,7 @@
     --con-bg:   #001833;
     --grn-bg:   #0A1F0A;
     --onebc-bg: #1A0A2A;
+    --unm-bg:   #0A2320;
     --ind-bg:   #0E1A20;
     --vac-bg:   #1A1A1A;
   }
@@ -65,6 +68,7 @@
   --con-bg:   #001833;
   --grn-bg:   #0A1F0A;
   --onebc-bg: #1A0A2A;
+  --unm-bg:   #0A2320;
   --ind-bg:   #0E1A20;
   --vac-bg:   #1A1A1A;
 }
@@ -121,6 +125,7 @@ header {
 .pill.con   { background: rgba(0,63,140,.35);     color: #7BAEE8; border: 1px solid rgba(0,63,140,.5); }
 .pill.grn   { background: rgba(46,125,50,.3);     color: #81C784; border: 1px solid rgba(46,125,50,.5); }
 .pill.onebc { background: rgba(123,31,162,.3);    color: #CE93D8; border: 1px solid rgba(123,31,162,.5); }
+.pill.unm   { background: rgba(0,105,92,.3);      color: #4DB6AC; border: 1px solid rgba(0,105,92,.5); }
 .pill.ind   { background: rgba(84,110,122,.3);    color: #90A4AE; border: 1px solid rgba(84,110,122,.5); }
 .pill.vac   { background: rgba(158,158,158,.2);   color: #BDBDBD; border: 1px solid rgba(158,158,158,.4); }
 
@@ -157,6 +162,7 @@ header {
 .filter-btn.con   { background: var(--con-bg);   color: var(--con);   border-color: var(--con); }
 .filter-btn.grn   { background: var(--grn-bg);   color: var(--grn);   border-color: var(--grn); }
 .filter-btn.onebc { background: var(--onebc-bg); color: var(--onebc); border-color: var(--onebc); }
+.filter-btn.unm   { background: var(--unm-bg);   color: var(--unm);   border-color: var(--unm); }
 .filter-btn.ind   { background: var(--ind-bg);   color: var(--ind);   border-color: var(--ind); }
 .filter-btn.vac   { background: var(--vac-bg);   color: var(--vac);   border-color: var(--vac); }
 
@@ -216,6 +222,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 .party-stripe.con   { background: var(--con); }
 .party-stripe.grn   { background: var(--grn); }
 .party-stripe.onebc { background: var(--onebc); }
+.party-stripe.unm   { background: var(--unm); }
 .party-stripe.ind   { background: var(--ind); }
 .party-stripe.vac   { background: var(--vac); }
 
@@ -254,6 +261,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 .avatar.con   { background: var(--con); }
 .avatar.grn   { background: var(--grn); }
 .avatar.onebc { background: var(--onebc); }
+.avatar.unm   { background: var(--unm); }
 .avatar.ind   { background: var(--ind); }
 .avatar.vac   { background: var(--vac); }
 
@@ -280,6 +288,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 .party-badge.con   { background: var(--con-bg);   color: var(--con); }
 .party-badge.grn   { background: var(--grn-bg);   color: var(--grn); }
 .party-badge.onebc { background: var(--onebc-bg); color: var(--onebc); }
+.party-badge.unm   { background: var(--unm-bg);   color: var(--unm); }
 .party-badge.ind   { background: var(--ind-bg);   color: var(--ind); }
 .party-badge.vac   { background: var(--vac-bg);   color: var(--vac); }
 
@@ -360,7 +369,7 @@ footer {
   <div class="header-inner">
     <div class="site-brand">
       <div class="site-name">BC MLA Tracker</div>
-      <div class="site-meta">43rd Parliament &middot; Updated Sep 2, 2026</div>
+      <div class="site-meta">43rd Parliament &middot; Updated Sep 6, 2026</div>
     </div>
     <div class="seat-bar-wrap">
       <div class="seat-pills" id="seatPills"></div>
@@ -477,7 +486,7 @@ const MLAS = [
   { id:72, lastName:"Tepper",          firstName:"Bryan",      riding:"Surrey-Panorama",             electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Bryan%20Portrait%201%20(2).jpg" },
   { id:73, lastName:"Toor",            firstName:"Jody",       riding:"Langley-Willowbrook",         electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Toor-Jody.jpg" },
   { id:74, lastName:"Van Popta",       firstName:"Misty",      riding:"Langley-Walnut Grove",        electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Van%20Popta-Misty.jpg" },
-  { id:75, lastName:"Warbus",          firstName:"Á'a:líya", riding:"Chilliwack-Cultus Lake", electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:'Aug 31/26 – <a href="https://x.com/RobShaw_BC/status/2094453080859558047" target="_blank" rel="noopener">Left Conservative caucus</a>', role:null, photo:"A'aliya%20Warbus.jpg" },
+  { id:75, lastName:"Warbus",          firstName:"Á'a:líya", riding:"Chilliwack-Cultus Lake", electedParty:"Conservative", currentParty:"Unnamed", firstElected:2024, changeNote:'Aug 31/26 – <a href="https://x.com/RobShaw_BC/status/2094453080859558047" target="_blank" rel="noopener">Left Conservative caucus</a>; Sep 6/26 – Joined unnamed caucus', role:null, photo:"A'aliya%20Warbus.jpg" },
   { id:76, lastName:"Williams",        firstName:"David",      riding:"Salmon Arm-Shuswap",          electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Williams-David.jpg" },
   { id:77, lastName:"Wilson",          firstName:"Donegal",    riding:"Boundary-Similkameen",        electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:'Sep 2/26 – <a href="https://www.cbc.ca/news/canada/british-columbia/conservative-mla-steps-down-9.7329679" target="_blank" rel="noopener">Left Conservative caucus</a>', role:null, photo:"Wilson-Donegal.jpg" },
   { id:93, lastName:"Block",           firstName:"Lynne",      riding:"West Vancouver-Capilano",     electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"LBlock-Headshot-Preferred%20(1).jpg" },
@@ -491,14 +500,14 @@ const MLAS = [
 
   // ── INDEPENDENT ─────────────────────────────────────────────────
   { id:81, lastName:"Armstrong",       firstName:"Tara",       riding:"Kelowna-Lake Country-Coldstream", electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 7/25 – Left Con caucus; Jun 9/25 – Co-founded OneBC; Dec 16/25 – Left OneBC", role:null, photo:"MLA%20Armstrong%20Headshot.jpeg" },
-  { id:82, lastName:"Banman",          firstName:"Bruce",      riding:"Abbotsford South",            electedParty:"Conservative", currentParty:"Independent", firstElected:2020, changeNote:"Aug 27/26 – Left Conservative caucus", role:null,                                              photo:"Banman-Bruce.jpg", fmrBCLib:true },
+  { id:82, lastName:"Banman",          firstName:"Bruce",      riding:"Abbotsford South",            electedParty:"Conservative", currentParty:"Unnamed", firstElected:2020, changeNote:"Aug 27/26 – Left Conservative caucus; Sep 6/26 – Joined unnamed caucus", role:null, photo:"Banman-Bruce.jpg", fmrBCLib:true },
   { id:83, lastName:"Chan",            firstName:"Hon",        riding:"Richmond Centre",             electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 26/26 – Removed from Conservative caucus", role:null,                                      photo:"Chan-Hon.jpg" },
   { id:84, lastName:"Day",             firstName:"Brennan",    riding:"Courtenay-Comox",             electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Day-Brennan.jpg", fmrBCLib:true },
   { id:85, lastName:"Kealy",           firstName:"Jordan",     riding:"Peace River North",           electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Mar 7/25 – Left Conservative caucus", role:null,                                              photo:"Kealy-Jordan.jpg" },
-  { id:86, lastName:"Milobar",         firstName:"Peter",      riding:"Kamloops Centre",             electedParty:"Conservative", currentParty:"Independent", firstElected:2017, changeNote:"Aug 14/26 – Left Conservative caucus", role:null,                                              photo:"Milobar-Peter.jpg" },
-  { id:87, lastName:"Paton",           firstName:"Ian",        riding:"Delta South",                 electedParty:"Conservative", currentParty:"Independent", firstElected:2017, changeNote:"Aug 24/26 – Left Conservative caucus", role:null,                                              photo:"Paton-Ian.jpg", fmrBCLib:true },
+  { id:86, lastName:"Milobar",         firstName:"Peter",      riding:"Kamloops Centre",             electedParty:"Conservative", currentParty:"Unnamed", firstElected:2017, changeNote:"Aug 14/26 – Left Conservative caucus; Sep 6/26 – Joined unnamed caucus", role:null, photo:"Milobar-Peter.jpg" },
+  { id:87, lastName:"Paton",           firstName:"Ian",        riding:"Delta South",                 electedParty:"Conservative", currentParty:"Unnamed", firstElected:2017, changeNote:"Aug 24/26 – Left Conservative caucus; Sep 6/26 – Joined unnamed caucus", role:null, photo:"Paton-Ian.jpg", fmrBCLib:true },
   { id:88, lastName:"Sturko",          firstName:"Elenore",    riding:"Surrey-Cloverdale",           electedParty:"Conservative", currentParty:"Independent", firstElected:2022, changeNote:"Sep 22/25 – Removed from Conservative caucus", role:null,                                      photo:"Sturko-Elenore.jpg", fmrBCLib:true },
-  { id:48, lastName:"Bird",            firstName:"Rosalyn",    riding:"Prince George-Valemount",     electedParty:"Conservative", currentParty:"Independent", firstElected:2024, changeNote:"Aug 25/26 – Left Conservative caucus", role:null,                                              photo:"Rosalyn%20Bird%20Conservative%20Party%20_KRL_20241210__AVE7919%20copy%202.jpg" },
+  { id:48, lastName:"Bird",            firstName:"Rosalyn",    riding:"Prince George-Valemount",     electedParty:"Conservative", currentParty:"Unnamed", firstElected:2024, changeNote:"Aug 25/26 – Left Conservative caucus; Sep 6/26 – Joined unnamed caucus", role:null, photo:"Rosalyn%20Bird%20Conservative%20Party%20_KRL_20241210__AVE7919%20copy%202.jpg" },
   { id:89, lastName:"Wat",             firstName:"Teresa",     riding:"Richmond-Bridgeport",         electedParty:"Conservative", currentParty:"Independent", firstElected:2013, changeNote:"Aug 26/26 – Left Conservative caucus", role:null,                                              photo:"Wat-Teresa.jpg", fmrBCLib:true },
 
   // ── VACANT ──────────────────────────────────────────────────────
@@ -511,16 +520,16 @@ const MLAS = [
 // ─────────────────────────────────────────────
 const PARTY_KEY = {
   "NDP":"ndp","Conservative":"con","Green":"grn",
-  "OneBC":"onebc","Independent":"ind","Vacant":"vac"
+  "OneBC":"onebc","Unnamed":"unm","Independent":"ind","Vacant":"vac"
 };
 const PARTY_LABEL = {
   "NDP":"BC NDP","Conservative":"Conservative","Green":"BC Greens",
-  "OneBC":"OneBC","Independent":"Independent","Vacant":"Vacant"
+  "OneBC":"OneBC","Unnamed":"Unnamed Party","Independent":"Independent","Vacant":"Vacant"
 };
-const PARTY_ORDER  = ["NDP","Conservative","Green","OneBC","Independent","Vacant"];
+const PARTY_ORDER  = ["NDP","Conservative","Green","OneBC","Unnamed","Independent","Vacant"];
 const PARTY_COLORS = {
   "NDP":"#E8721A","Conservative":"#003F8C","Green":"#2E7D32",
-  "OneBC":"#7B1FA2","Independent":"#546E7A","Vacant":"#9E9E9E"
+  "OneBC":"#7B1FA2","Unnamed":"#00695C","Independent":"#546E7A","Vacant":"#9E9E9E"
 };
 
 function initials(m) {
@@ -532,7 +541,7 @@ function partyKey(p) { return PARTY_KEY[p] || "ind"; }
 // ─────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────
-let activeFilters = new Set(["NDP","Conservative","Green","OneBC","Independent","Vacant"]);
+let activeFilters = new Set(["NDP","Conservative","Green","OneBC","Unnamed","Independent","Vacant"]);
 let sortMode = "caucus-alpha";
 
 // ─────────────────────────────────────────────
