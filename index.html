@@ -553,13 +553,20 @@ function seatCounts() {
   return c;
 }
 
+function partiesBySeats(counts) {
+  const nonVacant = PARTY_ORDER.filter(p => p !== "Vacant" && counts[p] > 0);
+  nonVacant.sort((a, b) => (counts[b] || 0) - (counts[a] || 0));
+  if (counts["Vacant"]) nonVacant.push("Vacant");
+  return nonVacant;
+}
+
 function renderHeaderPills() {
   const counts = seatCounts();
   const pills = document.getElementById("seatPills");
   const bar   = document.getElementById("propBar");
   const total = MLAS.length;
   pills.innerHTML = bar.innerHTML = "";
-  PARTY_ORDER.forEach(p => {
+  partiesBySeats(counts).forEach(p => {
     if (!counts[p]) return;
     const key  = partyKey(p);
     const abbr = {NDP:"NDP",Conservative:"Con",Green:"Green",OneBC:"OneBC",Independent:"Ind.",Vacant:"Vacant"}[p];
@@ -575,8 +582,8 @@ function renderFilterButtons() {
   const counts = seatCounts();
   const grp    = document.getElementById("filterGroup");
   grp.innerHTML = "";
-  const abbr = {NDP:"NDP",Conservative:"Conservative",Green:"Green",OneBC:"OneBC",Independent:"Independent",Vacant:"Vacant"};
-  PARTY_ORDER.forEach(p => {
+  const abbr = {NDP:"NDP",Conservative:"Conservative",Green:"Green",OneBC:"OneBC",Unnamed:"Unnamed Party",Independent:"Independent",Vacant:"Vacant"};
+  partiesBySeats(counts).forEach(p => {
     const key  = partyKey(p);
     const cnt  = counts[p] || 0;
     const btn  = document.createElement("button");
@@ -598,12 +605,15 @@ function renderFilterButtons() {
 function sortedMlas(list) {
   const copy = [...list];
   switch(sortMode) {
-    case "caucus-alpha": return copy.sort((a,b) => {
-      const ao = PARTY_ORDER.indexOf(a.currentParty);
-      const bo = PARTY_ORDER.indexOf(b.currentParty);
-      if (ao !== bo) return ao - bo;
-      return a.lastName.localeCompare(b.lastName);
-    });
+    case "caucus-alpha": {
+      const order = partiesBySeats(seatCounts());
+      return copy.sort((a,b) => {
+        const ao = order.indexOf(a.currentParty);
+        const bo = order.indexOf(b.currentParty);
+        if (ao !== bo) return ao - bo;
+        return a.lastName.localeCompare(b.lastName);
+      });
+    }
     case "alpha":             return copy.sort((a,b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName));
     case "riding":            return copy.sort((a,b) => a.riding.localeCompare(b.riding));
     case "first-elected-asc": return copy.sort((a,b) => (a.firstElected||9999)-(b.firstElected||9999) || a.lastName.localeCompare(b.lastName));
@@ -674,7 +684,7 @@ function renderCards() {
 
   let html = "";
   if (sortMode === "caucus-alpha") {
-    PARTY_ORDER.forEach(party => {
+    partiesBySeats(seatCounts()).forEach(party => {
       if (!activeFilters.has(party)) return;
       const group = sorted.filter(m => m.currentParty === party);
       if (!group.length) return;
