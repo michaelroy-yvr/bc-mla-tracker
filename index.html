@@ -324,6 +324,20 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 .empty-state { padding: 60px 20px; text-align: center; color: var(--muted); font-size: 1rem; display: none; }
 .empty-state.visible { display: block; }
 
+/* ── by-election banner ── */
+.byelection-banner {
+  background: #1A3A6B;
+  color: #fff;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  padding: 7px 20px;
+  line-height: 1.4;
+}
+.byelection-banner a { color: #90CAF9; text-decoration: underline; text-underline-offset: 2px; }
+.byelection-banner a:hover { color: #fff; }
+
 /* ── footer ── */
 footer {
   border-top: 1px solid var(--border);
@@ -369,7 +383,7 @@ footer {
   <div class="header-inner">
     <div class="site-brand">
       <div class="site-name">BC MLA Tracker</div>
-      <div class="site-meta">43rd Parliament &middot; Updated Sep 6, 2026</div>
+      <div class="site-meta">43rd Parliament &middot; Updated Sep 10, 2026</div>
     </div>
     <div class="seat-bar-wrap">
       <div class="seat-pills" id="seatPills"></div>
@@ -377,6 +391,10 @@ footer {
   </div>
   <div class="seat-prop-bar" id="propBar"></div>
 </header>
+
+<div class="byelection-banner" id="byElectionBanner">
+  📋 Abbotsford-Mission By-election – <a href="https://elections.bc.ca/2026-abbotsford-mission-by-election/" target="_blank" rel="noopener">September 26, 2026</a>
+</div>
 
 <div class="controls-bar">
   <div class="controls-inner">
@@ -411,52 +429,52 @@ const PHOTO_BASE = 'https://api.lims.leg.bc.ca/public/images/mla-headshots/43/sm
 const MLAS = [
   // ── NDP ──────────────────────────────────────────────────────────
   { id:1,  lastName:"Eby",             firstName:"David",      riding:"Vancouver-Point Grey",        electedParty:"NDP", currentParty:"NDP", firstElected:2013, changeNote:null, role:"Premier",          photo:"Eby-David.jpg" },
-  { id:2,  lastName:"Farnworth",       firstName:"Mike",       riding:"Port Coquitlam",              electedParty:"NDP", currentParty:"NDP", firstElected:1991, changeNote:null, role:"House Leader",      photo:"Farnworth-Mike.jpg" },
+  { id:2,  lastName:"Farnworth",       firstName:"Mike",       riding:"Port Coquitlam",              electedParty:"NDP", currentParty:"NDP", firstElected:1991, changeNote:null, role:"Min of Transportation", photo:"Farnworth-Mike.jpg" },
   { id:3,  lastName:"Chouhan",         firstName:"Raj",        riding:"Burnaby-New Westminster",     electedParty:"NDP", currentParty:"NDP", firstElected:2005, changeNote:null, role:"Speaker",           photo:"Chouhan-Raj.jpg" },
-  { id:4,  lastName:"Anderson",        firstName:"Brittny",    riding:"Kootenay Central",            electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Anderson-Brittny.jpg" },
+  { id:4,  lastName:"Anderson",        firstName:"Brittny",    riding:"Kootenay Central",            electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:"Min of State, Local Govts", photo:"Anderson-Brittny.jpg" },
   { id:5,  lastName:"Anderson",        firstName:"George",     riding:"Nanaimo-Lantzville",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"George_Anderson_MLA%20Cropped.jpg" },
   { id:6,  lastName:"Arora",           firstName:"Reah",       riding:"Burnaby East",                electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Arora-Rohini.jpg" },
-  { id:7,  lastName:"Bailey",          firstName:"Brenda",     riding:"Vancouver-South Granville",   electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Bailey-Brenda.jpg" },
-  { id:8,  lastName:"Beare",           firstName:"Lisa",       riding:"Maple Ridge-Pitt Meadows",    electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Beare-Lisa.jpg" },
+  { id:7,  lastName:"Bailey",          firstName:"Brenda",     riding:"Vancouver-South Granville",   electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:"Min of Jobs & Economic Growth", photo:"Bailey-Brenda.jpg" },
+  { id:8,  lastName:"Beare",           firstName:"Lisa",       riding:"Maple Ridge-Pitt Meadows",    electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:"Min of Education",  photo:"Beare-Lisa.jpg" },
   { id:9,  lastName:"Begg",            firstName:"Garry",      riding:"Surrey-Guildford",            electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Begg-Garry.jpg" },
   { id:10, lastName:"Blatherwick",     firstName:"Jennifer",   riding:"Coquitlam-Maillardville",     electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Blatherwick-Jennifer.jpg" },
   { id:11, lastName:"Boultbee",        firstName:"Amelia",     riding:"Penticton-Summerland",        electedParty:"Conservative", currentParty:"NDP", firstElected:2024, changeNote:"Oct 20/25 – Left Con caucus; Jul 3/26 – Joined NDP caucus", role:null, photo:"Boultbee-Amelia.jpg" },
-  { id:12, lastName:"Boyle",           firstName:"Christine",  riding:"Vancouver-Little Mountain",   electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Boyle-Christine.jpg" },
-  { id:13, lastName:"Brar",            firstName:"Jagrup",     riding:"Surrey-Fleetwood",            electedParty:"NDP", currentParty:"NDP", firstElected:2004, changeNote:null, role:null,                photo:"Brar-Jagrup.jpg" },
-  { id:14, lastName:"Chandra Herbert", firstName:"Spencer",    riding:"Vancouver-West End",          electedParty:"NDP", currentParty:"NDP", firstElected:2008, changeNote:null, role:null,                photo:"Chandra-Herbert-Spencer.jpg" },
+  { id:12, lastName:"Boyle",           firstName:"Christine",  riding:"Vancouver-Little Mountain",   electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:"Min of Housing",    photo:"Boyle-Christine.jpg" },
+  { id:13, lastName:"Brar",            firstName:"Jagrup",     riding:"Surrey-Fleetwood",            electedParty:"NDP", currentParty:"NDP", firstElected:2004, changeNote:null, role:"Min of Mining",     photo:"Brar-Jagrup.jpg" },
+  { id:14, lastName:"Chandra Herbert", firstName:"Spencer",    riding:"Vancouver-West End",          electedParty:"NDP", currentParty:"NDP", firstElected:2008, changeNote:null, role:"Min of Indigenous Relations", photo:"Chandra-Herbert-Spencer.jpg" },
   { id:15, lastName:"Chant",           firstName:"Susie",      riding:"North Vancouver-Seymour",     electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Chant-Susie.jpg" },
   { id:16, lastName:"Choi",            firstName:"Paul",       riding:"Burnaby South-Metrotown",     electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Choi-Paul.jpg" },
   { id:17, lastName:"Chow",            firstName:"George",     riding:"Vancouver-Fraserview",        electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Chow-George.jpg" },
-  { id:18, lastName:"Davidson",        firstName:"Tamara",     riding:"North Coast-Haida Gwaii",     electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Davidson-Tamara.jpg" },
+  { id:18, lastName:"Davidson",        firstName:"Tamara",     riding:"North Coast-Haida Gwaii",     electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:"Min of Environment", photo:"Davidson-Tamara.jpg" },
   { id:19, lastName:"Dhir",            firstName:"Sunita",     riding:"Vancouver-Langara",           electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Dhir,%20Sunita.JPG" },
-  { id:20, lastName:"Dix",             firstName:"Adrian",     riding:"Vancouver-Renfrew",           electedParty:"NDP", currentParty:"NDP", firstElected:2005, changeNote:null, role:null,                photo:"Dix-Adrian.jpg" },
+  { id:20, lastName:"Dix",             firstName:"Adrian",     riding:"Vancouver-Renfrew",           electedParty:"NDP", currentParty:"NDP", firstElected:2005, changeNote:null, role:"Min of Energy",     photo:"Dix-Adrian.jpg" },
   { id:21, lastName:"Elmore",          firstName:"Mable",      riding:"Vancouver-Kensington",        electedParty:"NDP", currentParty:"NDP", firstElected:2009, changeNote:null, role:"Deputy Speaker",    photo:"Elmore-Mable.jpg" },
-  { id:22, lastName:"Gibson",          firstName:"Diana",      riding:"Oak Bay-Gordon Head",         electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Gibson-Diana.jpg" },
-  { id:23, lastName:"Glumac",          firstName:"Rick",       riding:"Port Moody-Burquitlam",       electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Glumac-Rick.jpg" },
-  { id:24, lastName:"Greene",          firstName:"Kelly",      riding:"Richmond-Steveston",          electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Greene-Kelly.jpg" },
+  { id:22, lastName:"Gibson",          firstName:"Diana",      riding:"Oak Bay-Gordon Head",         electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:"Min of Citizens' Services", photo:"Gibson-Diana.jpg" },
+  { id:23, lastName:"Glumac",          firstName:"Rick",       riding:"Port Moody-Burquitlam",       electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:"Min of State, AI & Tech", photo:"Glumac-Rick.jpg" },
+  { id:24, lastName:"Greene",          firstName:"Kelly",      riding:"Richmond-Steveston",          electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:"Min of Emergency Management", photo:"Greene-Kelly.jpg" },
   { id:25, lastName:"Higginson",       firstName:"Stephanie",  riding:"Ladysmith-Oceanside",         electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Higginson-Stephanie.jpg" },
-  { id:26, lastName:"Kahlon",          firstName:"Ravi",       riding:"Delta North",                 electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Kahlon-Ravi.jpg" },
-  { id:27, lastName:"Kang",            firstName:"Anne",       riding:"Burnaby Centre",              electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Kang-Anne.jpg" },
-  { id:28, lastName:"Krieger",         firstName:"Nina",       riding:"Victoria-Swan Lake",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Krieger-Nina.jpg" },
+  { id:26, lastName:"Kahlon",          firstName:"Ravi",       riding:"Delta North",                 electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:"Min of Health",     photo:"Kahlon-Ravi.jpg" },
+  { id:27, lastName:"Kang",            firstName:"Anne",       riding:"Burnaby Centre",              electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:"Min of Tourism & Arts", photo:"Kang-Anne.jpg" },
+  { id:28, lastName:"Krieger",         firstName:"Nina",       riding:"Victoria-Swan Lake",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:"Min of Public Safety", photo:"Krieger-Nina.jpg" },
   { id:29, lastName:"Lajeunesse",      firstName:"Dana",       riding:"Juan de Fuca-Malahat",        electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Lajeunesse-Dana.jpg" },
-  { id:30, lastName:"Lore",            firstName:"Grace",      riding:"Victoria-Beacon Hill",        electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Lore-Grace.jpg" },
-  { id:31, lastName:"Ma",              firstName:"Bowinn",     riding:"North Vancouver-Lonsdale",    electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:null,                photo:"Ma-Bowinn.jpg" },
-  { id:32, lastName:"Malcolmson",      firstName:"Sheila",     riding:"Nanaimo-Gabriola Island",     electedParty:"NDP", currentParty:"NDP", firstElected:2019, changeNote:null, role:null,                photo:"Malcolmson-Sheila.jpg" },
+  { id:30, lastName:"Lore",            firstName:"Grace",      riding:"Victoria-Beacon Hill",        electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:"Min without Portfolio", photo:"Lore-Grace.jpg" },
+  { id:31, lastName:"Ma",              firstName:"Bowinn",     riding:"North Vancouver-Lonsdale",    electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:"Min of Infrastructure", photo:"Ma-Bowinn.jpg" },
+  { id:32, lastName:"Malcolmson",      firstName:"Sheila",     riding:"Nanaimo-Gabriola Island",     electedParty:"NDP", currentParty:"NDP", firstElected:2019, changeNote:null, role:"Min of Social Development", photo:"Malcolmson-Sheila.jpg" },
   { id:33, lastName:"Morissette",      firstName:"Steve",      riding:"Kootenay-Monashee",           electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Morissette-Steve.jpg" },
-  { id:34, lastName:"Neill",           firstName:"Randene",    riding:"Powell River-Sunshine Coast", electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Neill-Randene.jpg" },
-  { id:35, lastName:"Osborne",         firstName:"Josie",      riding:"Mid Island-Pacific Rim",      electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Osborne-Josie.jpg" },
-  { id:36, lastName:"Parmar",          firstName:"Ravi",       riding:"Langford-Highlands",          electedParty:"NDP", currentParty:"NDP", firstElected:2023, changeNote:null, role:null,                photo:"Parmar-Ravi.jpg" },
+  { id:34, lastName:"Neill",           firstName:"Randene",    riding:"Powell River-Sunshine Coast", electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:"Min of Water & Land", photo:"Neill-Randene.jpg" },
+  { id:35, lastName:"Osborne",         firstName:"Josie",      riding:"Mid Island-Pacific Rim",      electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:"Min of Finance",    photo:"Osborne-Josie.jpg" },
+  { id:36, lastName:"Parmar",          firstName:"Ravi",       riding:"Langford-Highlands",          electedParty:"NDP", currentParty:"NDP", firstElected:2023, changeNote:null, role:"Min of Forests",    photo:"Parmar-Ravi.jpg" },
   { id:37, lastName:"Rotchford",       firstName:"Darlene",    riding:"Esquimalt-Colwood",           electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Rotchford-Darlene.jpg" },
   { id:38, lastName:"Routledge",       firstName:"Janet",      riding:"Burnaby North",               electedParty:"NDP", currentParty:"NDP", firstElected:2017, changeNote:null, role:"Whip",              photo:"Routledge-Janet.jpg" },
   { id:39, lastName:"Sandhu",          firstName:"Harwinder",  riding:"Vernon-Lumby",                electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Sandhu-Harwinder.jpg" },
   { id:40, lastName:"Shah",            firstName:"Amna",       riding:"Surrey City Centre",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Shah-Amna.jpg" },
-  { id:41, lastName:"Sharma",          firstName:"Niki",       riding:"Vancouver-Hastings",          electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Sharma-Niki.jpg" },
-  { id:42, lastName:"Sunner",          firstName:"Jessie",     riding:"Surrey-Newton",               electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Sunner-Jessie.jpg" },
+  { id:41, lastName:"Sharma",          firstName:"Niki",       riding:"Vancouver-Hastings",          electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:"AG & Deputy Premier", photo:"Sharma-Niki.jpg" },
+  { id:42, lastName:"Sunner",          firstName:"Jessie",     riding:"Surrey-Newton",               electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:"Min of Post-Secondary Ed.", photo:"Sunner-Jessie.jpg" },
   { id:43, lastName:"Toporowski",      firstName:"Debra",      riding:"Cowichan Valley",             electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Toporowski-Debra.jpg" },
-  { id:44, lastName:"Whiteside",       firstName:"Jennifer",   riding:"New Westminster-Coquitlam",   electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:null,                photo:"Whiteside-Jennifer.jpg" },
-  { id:45, lastName:"Wickens",         firstName:"Jodie",      riding:"Coquitlam-Burke Mountain",    electedParty:"NDP", currentParty:"NDP", firstElected:2016, changeNote:null, role:null,                photo:"Wickens-Jodie.jpg" },
-  { id:46, lastName:"Yung",            firstName:"Terry",      riding:"Vancouver-Yaletown",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:null,                photo:"Yung-Terry.jpg" },
-  { id:92, lastName:"Popham",          firstName:"Lana",       riding:"Saanich South",               electedParty:"NDP", currentParty:"NDP", firstElected:2009, changeNote:null, role:null,                photo:"Popham-Lana.jpg" },
+  { id:44, lastName:"Whiteside",       firstName:"Jennifer",   riding:"New Westminster-Coquitlam",   electedParty:"NDP", currentParty:"NDP", firstElected:2020, changeNote:null, role:"Min of Labour",     photo:"Whiteside-Jennifer.jpg" },
+  { id:45, lastName:"Wickens",         firstName:"Jodie",      riding:"Coquitlam-Burke Mountain",    electedParty:"NDP", currentParty:"NDP", firstElected:2016, changeNote:null, role:"Min of Children & Families", photo:"Wickens-Jodie.jpg" },
+  { id:46, lastName:"Yung",            firstName:"Terry",      riding:"Vancouver-Yaletown",          electedParty:"NDP", currentParty:"NDP", firstElected:2024, changeNote:null, role:"Min of State, Community Safety", photo:"Yung-Terry.jpg" },
+  { id:92, lastName:"Popham",          firstName:"Lana",       riding:"Saanich South",               electedParty:"NDP", currentParty:"NDP", firstElected:2009, changeNote:null, role:"Min of Agriculture", photo:"Popham-Lana.jpg" },
 
   // ── CONSERVATIVE ────────────────────────────────────────────────
   { id:47, lastName:"Bhangu",          firstName:"Harman",     riding:"Langley-Abbotsford",          electedParty:"Conservative", currentParty:"Conservative", firstElected:2024, changeNote:null, role:null,                      photo:"Bhangu-Harman.jpg" },
@@ -712,6 +730,9 @@ function renderCards() {
 document.getElementById("sortSelect").addEventListener("change", e => {
   sortMode = e.target.value; renderCards();
 });
+if (new Date() >= new Date('2026-09-27T00:00:00')) {
+  document.getElementById("byElectionBanner").hidden = true;
+}
 renderHeaderPills();
 renderFilterButtons();
 renderCards();
