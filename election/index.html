@@ -248,6 +248,60 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 .dot.cbc { background: var(--cbc); }
 .dot.ind { background: var(--ind); }
 
+/* ── intro overlay ── */
+#intro-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.65);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+#intro-overlay[hidden] { display: none; }
+.intro-modal {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 26px 28px 24px;
+  max-width: 520px; width: 100%;
+  box-shadow: 0 24px 64px rgba(0,0,0,.45);
+  color: #1A1A1A;
+}
+.intro-modal h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem; font-weight: 400;
+  margin-bottom: 2px; color: #1A1A1A;
+}
+.intro-sub {
+  font-size: 0.82rem; color: #6B6360;
+  margin-bottom: 14px; line-height: 1.4;
+}
+.annotate-svg { width: 100%; height: auto; display: block; margin-bottom: 14px; }
+.intro-filter-tip {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: #EFF6FF; border: 1px solid #BFDBFE;
+  border-radius: 8px; padding: 11px 14px;
+  font-size: 0.82rem; line-height: 1.5; color: #1E40AF;
+  margin-bottom: 18px;
+}
+.tip-icon { font-size: 1rem; flex: 0 0 auto; padding-top: 1px; }
+.tip-pill {
+  display: inline-block;
+  font-size: 0.72rem; font-weight: 700;
+  padding: 1px 7px; border-radius: 10px;
+  vertical-align: middle; letter-spacing: .03em;
+}
+.tip-pill.ndp { background: #FFF3E6; color: #E8721A; border: 1px solid rgba(232,114,26,.4); }
+.tip-pill.con { background: #E8EEF7; color: #003F8C; border: 1px solid rgba(0,63,140,.4); }
+.intro-ok {
+  display: block; margin: 0 auto;
+  padding: 9px 40px;
+  background: #0D2040; color: #fff;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.9rem; font-weight: 600; letter-spacing: .03em;
+  border: none; border-radius: 20px; cursor: pointer;
+  transition: background .15s;
+}
+.intro-ok:hover { background: #1e3d6e; }
+
 /* ── footer ── */
 footer {
   background: var(--header-bg);
@@ -318,7 +372,84 @@ footer {
   </div>
 </footer>
 
+<!-- ── First-time intro overlay ── -->
+<div id="intro-overlay" hidden>
+  <div class="intro-modal">
+    <h2>How to read this tracker</h2>
+    <p class="intro-sub">Each box represents one of BC's 93 electoral ridings.</p>
+
+    <!-- Annotated sample card -->
+    <svg class="annotate-svg" viewBox="0 0 500 215" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <marker id="arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+          <path d="M0,0 L7,2.5 L0,5 Z" fill="#64748B"/>
+        </marker>
+      </defs>
+
+      <!-- Card drop-shadow -->
+      <rect x="147" y="17" width="195" height="120" rx="6" fill="rgba(0,0,0,.07)"/>
+      <!-- Card body -->
+      <rect x="145" y="15" width="195" height="120" rx="6" fill="#FFFFFF" stroke="#E0DDD8" stroke-width="1.5"/>
+      <!-- Left stripe: NDP orange = 2024 winner -->
+      <rect x="145" y="15" width="5" height="120" rx="3" fill="#E8721A"/>
+
+      <!-- Riding name -->
+      <text x="163" y="44" font-family="'Source Sans 3',sans-serif" font-size="13" font-weight="700" fill="#1A1A1A">Burnaby Centre</text>
+      <!-- Candidate line (dimmed – shown when party is filtered) -->
+      <text x="163" y="62" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#B0A8A4" font-style="italic">Candidate TBD</text>
+
+      <!-- Party dots row -->
+      <circle cx="163" cy="108" r="5" fill="#E8721A"/>
+      <circle cx="177" cy="108" r="5" fill="#003F8C"/>
+      <circle cx="191" cy="108" r="5" fill="#2E7D32"/>
+      <circle cx="205" cy="108" r="5" fill="#00695C"/>
+
+      <!-- ── Callout 1: stripe → "2024 winning party colour" ── -->
+      <rect x="4" y="50" width="132" height="50" rx="5" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+      <text x="70" y="72" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#334155" text-anchor="middle">2024 winning</text>
+      <text x="70" y="88" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#334155" text-anchor="middle">party colour</text>
+      <line x1="137" y1="75" x2="143" y2="75" stroke="#64748B" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ── Callout 2: riding name ── -->
+      <rect x="356" y="28" width="138" height="28" rx="5" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+      <text x="425" y="46" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#334155" text-anchor="middle">Riding name</text>
+      <line x1="356" y1="42" x2="297" y2="42" stroke="#64748B" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ── Callout 3: dots → "parties with a candidate" ── -->
+      <rect x="138" y="148" width="220" height="48" rx="5" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+      <text x="248" y="169" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#334155" text-anchor="middle">Coloured dots = parties that have</text>
+      <text x="248" y="185" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#334155" text-anchor="middle">nominated a candidate in this riding</text>
+      <line x1="184" y1="148" x2="184" y2="115" stroke="#64748B" stroke-width="1.5" marker-end="url(#arr)"/>
+    </svg>
+
+    <div class="intro-filter-tip">
+      <span class="tip-icon">👆</span>
+      <span>Click the party buttons at the top — like
+        <span class="tip-pill ndp">BC NDP</span> or
+        <span class="tip-pill con">Conservative</span> — to show each party's
+        nominated candidate inside every riding card.</span>
+    </div>
+
+    <button class="intro-ok" id="intro-ok">Got it!</button>
+  </div>
+</div>
+
 <script>
+// ─────────────────────────────────────────────
+// INTRO OVERLAY
+// ─────────────────────────────────────────────
+(function() {
+  const KEY = 'bc-elec-intro-seen';
+  const overlay = document.getElementById('intro-overlay');
+  try {
+    if (!localStorage.getItem(KEY)) overlay.removeAttribute('hidden');
+  } catch(e) { overlay.removeAttribute('hidden'); }
+  document.getElementById('intro-ok').addEventListener('click', () => {
+    overlay.hidden = true;
+    try { localStorage.setItem(KEY, '1'); } catch(e) {}
+  });
+})();
+
 // ─────────────────────────────────────────────
 // PARTIES
 // ─────────────────────────────────────────────
