@@ -87,11 +87,8 @@ header {
   font-family: 'Libre Baskerville', Georgia, serif;
   font-style: italic;
   font-size: 1.35rem; font-weight: 400;
-  letter-spacing: -.01em;
-  color: #fff;
-  text-decoration: none;
+  letter-spacing: -.01em; color: #fff;
 }
-.site-name:hover { text-decoration: underline; text-underline-offset: 3px; }
 .site-meta {
   font-size: 0.7rem; color: rgba(255,255,255,.5);
   letter-spacing: .04em; text-transform: uppercase;
@@ -163,15 +160,46 @@ header {
 .filter-btn.cbc   { background: var(--cbc-bg); color: var(--cbc); border-color: var(--cbc); }
 .filter-btn.ind   { background: var(--ind-bg); color: var(--ind); border-color: var(--ind); }
 
+.sort-wrap { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+.sort-label { font-size: 0.72rem; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.sort-select {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.8rem;
+  padding: 4px 28px 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
 .result-count { font-size: 0.72rem; color: var(--muted); letter-spacing: .03em; padding: 0 4px; }
 
-/* ── main grid ── */
+/* ── main ── */
 main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
+
 .riding-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
 }
+
+/* ── region sections ── */
+.region-section { margin-bottom: 32px; }
+.region-heading {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+.region-heading h2 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 1rem; font-weight: 700; color: var(--text);
+}
+.region-count { font-size: 0.75rem; color: var(--muted); margin-left: 2px; }
 
 /* ── riding card ── */
 .riding-card {
@@ -185,7 +213,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
   min-height: 90px;
 }
 .riding-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
-.riding-card.dim { opacity: .35; }
+.riding-card.dim { opacity: .3; }
 
 .winner-stripe { width: 4px; flex: 0 0 4px; }
 .winner-stripe.ndp { background: var(--ndp); }
@@ -197,39 +225,22 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
   display: flex; flex-direction: column; gap: 6px;
   flex: 1; min-width: 0;
 }
-
 .riding-name {
   font-size: 0.8rem; font-weight: 700; color: var(--text);
   line-height: 1.25;
 }
-.won-badge {
-  display: inline-block;
-  font-size: 0.58rem; font-weight: 700; letter-spacing: .04em;
-  text-transform: uppercase;
-  padding: 1px 5px; border-radius: 10px; line-height: 1.5;
-  margin-left: 4px; vertical-align: middle;
-}
-.won-badge.ndp { background: var(--ndp-bg); color: var(--ndp); }
-.won-badge.con { background: var(--con-bg); color: var(--con); }
-.won-badge.grn { background: var(--grn-bg); color: var(--grn); }
-
 .candidate-name {
   font-size: 0.8rem; font-weight: 600; color: var(--text);
-  flex: 1;
-  line-height: 1.3;
+  flex: 1; line-height: 1.3;
 }
-.candidate-name.tbd {
-  font-style: italic; font-weight: 400; color: var(--muted);
-}
+.candidate-name.tbd { font-style: italic; font-weight: 400; color: var(--muted); }
 
 .party-dots {
   display: flex; gap: 4px; align-items: center; flex-wrap: wrap;
   margin-top: auto;
 }
 .dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  flex: 0 0 8px;
-  title: attr(data-party);
+  width: 8px; height: 8px; border-radius: 50%; flex: 0 0 8px;
 }
 .dot.ndp { background: var(--ndp); }
 .dot.con { background: var(--con); }
@@ -240,9 +251,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 /* ── footer ── */
 footer {
   background: var(--header-bg);
-  color: rgba(255,255,255,.5);
   padding: 16px 20px;
-  margin-top: 0;
 }
 .footer-inner {
   max-width: 1400px; margin: 0 auto;
@@ -268,7 +277,7 @@ footer {
       <div class="site-meta">43rd Parliament · Upcoming Election</div>
     </div>
     <div class="header-nav">
-      <a href="/" >MLA Tracker</a>
+      <a href="/">MLA Tracker</a>
       <a href="/election/" class="active">Election</a>
     </div>
     <div class="seat-bar-wrap">
@@ -281,13 +290,19 @@ footer {
 <div class="controls-bar">
   <div class="controls-inner">
     <div class="filter-group" id="filterGroup"></div>
+    <div class="sort-wrap">
+      <label class="sort-label" for="sortSelect">Sort</label>
+      <select id="sortSelect" class="sort-select">
+        <option value="alpha">Alphabetical</option>
+        <option value="nominated">Nominated first</option>
+        <option value="region">By region</option>
+      </select>
+    </div>
     <span class="result-count" id="resultCount"></span>
   </div>
 </div>
 
-<main>
-  <div class="riding-grid" id="ridingGrid"></div>
-</main>
+<main id="mainContent"></main>
 
 <footer>
   <div class="footer-inner">
@@ -308,120 +323,120 @@ footer {
 // PARTIES
 // ─────────────────────────────────────────────
 const PARTIES = {
-  NDP:          { label:"BC NDP",        key:"ndp", color:"#E8721A" },
-  Conservative: { label:"Conservative",  key:"con", color:"#003F8C" },
-  Green:        { label:"BC Greens",     key:"grn", color:"#2E7D32" },
-  CentreBC:     { label:"CentreBC",      key:"cbc", color:"#00695C" },
-  Independent:  { label:"Independent",   key:"ind", color:"#546E7A" },
+  NDP:          { label:"BC NDP",       key:"ndp", color:"#E8721A" },
+  Conservative: { label:"Conservative", key:"con", color:"#003F8C" },
+  Green:        { label:"BC Greens",    key:"grn", color:"#2E7D32" },
+  CentreBC:     { label:"CentreBC",     key:"cbc", color:"#00695C" },
+  Independent:  { label:"Independent",  key:"ind", color:"#546E7A" },
 };
-
 const PARTY_ORDER = ["NDP","Conservative","Green","CentreBC","Independent"];
 
+const REGION_ORDER = ["Metro Vancouver","Fraser Valley/Lower Mainland","Island/North Coast","Interior"];
+
 // ─────────────────────────────────────────────
-// RIDINGS DATA
-// winner2024: party that won the seat in 2024
-// candidates: { PartyName: "Candidate Name" | null }
+// RIDINGS
 // ─────────────────────────────────────────────
 const RIDINGS = [
-  { id:1,  name:"Abbotsford-Mission",              winner2024:"Conservative", candidates:{} },
-  { id:2,  name:"Abbotsford South",                winner2024:"Conservative", candidates:{} },
-  { id:3,  name:"Abbotsford West",                 winner2024:"Conservative", candidates:{} },
-  { id:4,  name:"Boundary-Similkameen",            winner2024:"Conservative", candidates:{} },
-  { id:5,  name:"Bulkley Valley-Stikine",          winner2024:"Conservative", candidates:{} },
-  { id:6,  name:"Burnaby Centre",                  winner2024:"NDP",          candidates:{ NDP:"Anne Kang" } },
-  { id:7,  name:"Burnaby East",                    winner2024:"NDP",          candidates:{ NDP:"Reah Arora" } },
-  { id:8,  name:"Burnaby North",                   winner2024:"NDP",          candidates:{} },
-  { id:9,  name:"Burnaby South-Metrotown",         winner2024:"NDP",          candidates:{} },
-  { id:10, name:"Burnaby-New Westminster",         winner2024:"NDP",          candidates:{ NDP:"Raj Chouhan" } },
-  { id:11, name:"Cariboo-Chilcotin",               winner2024:"Conservative", candidates:{} },
-  { id:12, name:"Chilliwack North",                winner2024:"Conservative", candidates:{ Conservative:"Heather Maahs" } },
-  { id:13, name:"Chilliwack-Cultus Lake",          winner2024:"Conservative", candidates:{} },
-  { id:14, name:"Columbia River-Revelstoke",       winner2024:"Conservative", candidates:{} },
-  { id:15, name:"Coquitlam-Burke Mountain",        winner2024:"NDP",          candidates:{} },
-  { id:16, name:"Coquitlam-Maillardville",         winner2024:"NDP",          candidates:{} },
-  { id:17, name:"Courtenay-Comox",                 winner2024:"Conservative", candidates:{} },
-  { id:18, name:"Cowichan Valley",                 winner2024:"NDP",          candidates:{ NDP:"Debra Toporowski" } },
-  { id:19, name:"Delta North",                     winner2024:"NDP",          candidates:{ NDP:"Ravi Kahlon" } },
-  { id:20, name:"Delta South",                     winner2024:"Conservative", candidates:{ CentreBC:"Ian Paton" } },
-  { id:21, name:"Esquimalt-Colwood",               winner2024:"NDP",          candidates:{ NDP:"Darlene Rotchford" } },
-  { id:22, name:"Fraser-Nicola",                   winner2024:"Conservative", candidates:{} },
-  { id:23, name:"Juan de Fuca-Malahat",            winner2024:"NDP",          candidates:{} },
-  { id:24, name:"Kamloops Centre",                 winner2024:"Conservative", candidates:{ CentreBC:"Peter Milobar" } },
-  { id:25, name:"Kamloops-North Thompson",         winner2024:"Conservative", candidates:{} },
-  { id:26, name:"Kelowna Centre",                  winner2024:"Conservative", candidates:{ Conservative:"Kristina Loewen", CentreBC:"TBD", NDP:"TBD" } },
-  { id:27, name:"Kelowna-Lake Country-Coldstream", winner2024:"Conservative", candidates:{ Conservative:"Tara Armstrong" } },
-  { id:28, name:"Kelowna-Mission",                 winner2024:"Conservative", candidates:{} },
-  { id:29, name:"Kootenay Central",                winner2024:"NDP",          candidates:{ NDP:"Brittny Anderson" } },
-  { id:30, name:"Kootenay-Monashee",               winner2024:"NDP",          candidates:{} },
-  { id:31, name:"Kootenay-Rockies",                winner2024:"Conservative", candidates:{} },
-  { id:32, name:"Ladysmith-Oceanside",             winner2024:"NDP",          candidates:{} },
-  { id:33, name:"Langford-Highlands",              winner2024:"NDP",          candidates:{ NDP:"Ravi Parmar" } },
-  { id:34, name:"Langley-Abbotsford",              winner2024:"Conservative", candidates:{ Conservative:"Harman Bhangu" } },
-  { id:35, name:"Langley-Walnut Grove",            winner2024:"Conservative", candidates:{ Conservative:"Misty Van Popta" } },
-  { id:36, name:"Langley-Willowbrook",             winner2024:"Conservative", candidates:{} },
-  { id:37, name:"Maple Ridge East",                winner2024:"Conservative", candidates:{} },
-  { id:38, name:"Maple Ridge-Pitt Meadows",        winner2024:"NDP",          candidates:{ NDP:"Lisa Beare" } },
-  { id:39, name:"Mid Island-Pacific Rim",          winner2024:"NDP",          candidates:{} },
-  { id:40, name:"Nanaimo-Gabriola Island",         winner2024:"NDP",          candidates:{} },
-  { id:41, name:"Nanaimo-Lantzville",              winner2024:"NDP",          candidates:{} },
-  { id:42, name:"Nechako Lakes",                   winner2024:"Conservative", candidates:{ Conservative:"TBD" } },
-  { id:43, name:"New Westminster-Coquitlam",       winner2024:"NDP",          candidates:{ NDP:"Jennifer Whiteside" } },
-  { id:44, name:"North Coast-Haida Gwaii",         winner2024:"NDP",          candidates:{ NDP:"Tamara Davidson" } },
-  { id:45, name:"North Island",                    winner2024:"Conservative", candidates:{} },
-  { id:46, name:"North Vancouver-Lonsdale",        winner2024:"NDP",          candidates:{ NDP:"Bowinn Ma" } },
-  { id:47, name:"North Vancouver-Seymour",         winner2024:"NDP",          candidates:{} },
-  { id:48, name:"Oak Bay-Gordon Head",             winner2024:"NDP",          candidates:{ NDP:"Diana Gibson", Green:"TBD" } },
-  { id:49, name:"Peace River North",               winner2024:"Conservative", candidates:{} },
-  { id:50, name:"Peace River South",               winner2024:"Conservative", candidates:{} },
-  { id:51, name:"Penticton-Summerland",            winner2024:"Conservative", candidates:{ NDP:"Amelia Boultbee" } },
-  { id:52, name:"Port Coquitlam",                  winner2024:"NDP",          candidates:{ NDP:"Mike Farnworth" } },
-  { id:53, name:"Port Moody-Burquitlam",           winner2024:"NDP",          candidates:{} },
-  { id:54, name:"Powell River-Sunshine Coast",     winner2024:"NDP",          candidates:{} },
-  { id:55, name:"Prince George-Mackenzie",         winner2024:"Conservative", candidates:{} },
-  { id:56, name:"Prince George-North Cariboo",     winner2024:"Conservative", candidates:{ Conservative:"Sheldon Clare" } },
-  { id:57, name:"Prince George-Valemount",         winner2024:"Conservative", candidates:{} },
-  { id:58, name:"Richmond Centre",                 winner2024:"Conservative", candidates:{} },
-  { id:59, name:"Richmond-Bridgeport",             winner2024:"Conservative", candidates:{ CentreBC:"Teresa Wat" } },
-  { id:60, name:"Richmond-Queensborough",          winner2024:"Conservative", candidates:{} },
-  { id:61, name:"Richmond-Steveston",              winner2024:"NDP",          candidates:{} },
-  { id:62, name:"Saanich North and the Islands",   winner2024:"Green",        candidates:{ Green:"Rob Botterell", NDP:"TBD" } },
-  { id:63, name:"Saanich South",                   winner2024:"NDP",          candidates:{ NDP:"Lana Popham" } },
-  { id:64, name:"Salmon Arm-Shuswap",              winner2024:"Conservative", candidates:{} },
-  { id:65, name:"Skeena",                          winner2024:"Conservative", candidates:{} },
-  { id:66, name:"Surrey City Centre",              winner2024:"NDP",          candidates:{ NDP:"Amna Shah" } },
-  { id:67, name:"Surrey North",                    winner2024:"Conservative", candidates:{} },
-  { id:68, name:"Surrey South",                    winner2024:"Conservative", candidates:{ Conservative:"Brent Chapman" } },
-  { id:69, name:"Surrey-Cloverdale",               winner2024:"Conservative", candidates:{} },
-  { id:70, name:"Surrey-Fleetwood",                winner2024:"NDP",          candidates:{ NDP:"Jagrup Brar" } },
-  { id:71, name:"Surrey-Guildford",                winner2024:"NDP",          candidates:{} },
-  { id:72, name:"Surrey-Newton",                   winner2024:"NDP",          candidates:{} },
-  { id:73, name:"Surrey-Panorama",                 winner2024:"Conservative", candidates:{} },
-  { id:74, name:"Surrey-Serpentine River",         winner2024:"Conservative", candidates:{} },
-  { id:75, name:"Surrey-White Rock",               winner2024:"Conservative", candidates:{} },
-  { id:76, name:"Vancouver-Fraserview",            winner2024:"NDP",          candidates:{} },
-  { id:77, name:"Vancouver-Hastings",              winner2024:"NDP",          candidates:{ NDP:"Niki Sharma" } },
-  { id:78, name:"Vancouver-Kensington",            winner2024:"NDP",          candidates:{} },
-  { id:79, name:"Vancouver-Langara",               winner2024:"NDP",          candidates:{ NDP:"Sunita Dhir" } },
-  { id:80, name:"Vancouver-Little Mountain",       winner2024:"NDP",          candidates:{} },
-  { id:81, name:"Vancouver-Point Grey",            winner2024:"NDP",          candidates:{ NDP:"David Eby" } },
-  { id:82, name:"Vancouver-Quilchena",             winner2024:"Conservative", candidates:{} },
-  { id:83, name:"Vancouver-Renfrew",               winner2024:"NDP",          candidates:{ NDP:"Adrian Dix" } },
-  { id:84, name:"Vancouver-South Granville",       winner2024:"NDP",          candidates:{} },
-  { id:85, name:"Vancouver-Strathcona",            winner2024:"NDP",          candidates:{} },
-  { id:86, name:"Vancouver-West End",              winner2024:"NDP",          candidates:{ NDP:"Spencer Chandra Herbert" } },
-  { id:87, name:"Vancouver-Yaletown",              winner2024:"NDP",          candidates:{} },
-  { id:88, name:"Vernon-Lumby",                    winner2024:"NDP",          candidates:{} },
-  { id:89, name:"Victoria-Beacon Hill",            winner2024:"NDP",          candidates:{ NDP:"Grace Lore" } },
-  { id:90, name:"Victoria-Swan Lake",              winner2024:"NDP",          candidates:{ NDP:"Nina Krieger" } },
-  { id:91, name:"West Kelowna-Peachland",          winner2024:"Conservative", candidates:{} },
-  { id:92, name:"West Vancouver-Capilano",         winner2024:"Conservative", candidates:{} },
-  { id:93, name:"West Vancouver-Sea to Sky",       winner2024:"Green",        candidates:{ Green:"Jeremy Valeriote", NDP:"TBD" } },
+  { id:1,  name:"Abbotsford-Mission",              region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:2,  name:"Abbotsford South",                region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:3,  name:"Abbotsford West",                 region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:4,  name:"Boundary-Similkameen",            region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:5,  name:"Bulkley Valley-Stikine",          region:"Island/North Coast",           winner2024:"Conservative", candidates:{} },
+  { id:6,  name:"Burnaby Centre",                  region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Anne Kang" } },
+  { id:7,  name:"Burnaby East",                    region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Reah Arora" } },
+  { id:8,  name:"Burnaby North",                   region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:9,  name:"Burnaby South-Metrotown",         region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:10, name:"Burnaby-New Westminster",         region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Raj Chouhan" } },
+  { id:11, name:"Cariboo-Chilcotin",               region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:12, name:"Chilliwack North",                region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{ Conservative:"Heather Maahs" } },
+  { id:13, name:"Chilliwack-Cultus Lake",          region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:14, name:"Columbia River-Revelstoke",       region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:15, name:"Coquitlam-Burke Mountain",        region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:16, name:"Coquitlam-Maillardville",         region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:17, name:"Courtenay-Comox",                 region:"Island/North Coast",           winner2024:"Conservative", candidates:{} },
+  { id:18, name:"Cowichan Valley",                 region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Debra Toporowski" } },
+  { id:19, name:"Delta North",                     region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Ravi Kahlon" } },
+  { id:20, name:"Delta South",                     region:"Metro Vancouver",              winner2024:"Conservative", candidates:{ CentreBC:"Ian Paton" } },
+  { id:21, name:"Esquimalt-Colwood",               region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Darlene Rotchford" } },
+  { id:22, name:"Fraser-Nicola",                   region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:23, name:"Juan de Fuca-Malahat",            region:"Island/North Coast",           winner2024:"NDP",          candidates:{} },
+  { id:24, name:"Kamloops Centre",                 region:"Interior",                     winner2024:"Conservative", candidates:{ CentreBC:"Peter Milobar" } },
+  { id:25, name:"Kamloops-North Thompson",         region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:26, name:"Kelowna Centre",                  region:"Interior",                     winner2024:"Conservative", candidates:{ Conservative:"Kristina Loewen", CentreBC:"TBD", NDP:"TBD" } },
+  { id:27, name:"Kelowna-Lake Country-Coldstream", region:"Interior",                     winner2024:"Conservative", candidates:{ Conservative:"Tara Armstrong" } },
+  { id:28, name:"Kelowna-Mission",                 region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:29, name:"Kootenay Central",                region:"Interior",                     winner2024:"NDP",          candidates:{ NDP:"Brittny Anderson" } },
+  { id:30, name:"Kootenay-Monashee",               region:"Interior",                     winner2024:"NDP",          candidates:{} },
+  { id:31, name:"Kootenay-Rockies",                region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:32, name:"Ladysmith-Oceanside",             region:"Island/North Coast",           winner2024:"NDP",          candidates:{} },
+  { id:33, name:"Langford-Highlands",              region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Ravi Parmar" } },
+  { id:34, name:"Langley-Abbotsford",              region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{ Conservative:"Harman Bhangu" } },
+  { id:35, name:"Langley-Walnut Grove",            region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{ Conservative:"Misty Van Popta" } },
+  { id:36, name:"Langley-Willowbrook",             region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:37, name:"Maple Ridge East",                region:"Metro Vancouver",              winner2024:"Conservative", candidates:{} },
+  { id:38, name:"Maple Ridge-Pitt Meadows",        region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Lisa Beare" } },
+  { id:39, name:"Mid Island-Pacific Rim",          region:"Island/North Coast",           winner2024:"NDP",          candidates:{} },
+  { id:40, name:"Nanaimo-Gabriola Island",         region:"Island/North Coast",           winner2024:"NDP",          candidates:{} },
+  { id:41, name:"Nanaimo-Lantzville",              region:"Island/North Coast",           winner2024:"NDP",          candidates:{} },
+  { id:42, name:"Nechako Lakes",                   region:"Interior",                     winner2024:"Conservative", candidates:{ Conservative:"TBD" } },
+  { id:43, name:"New Westminster-Coquitlam",       region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Jennifer Whiteside" } },
+  { id:44, name:"North Coast-Haida Gwaii",         region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Tamara Davidson" } },
+  { id:45, name:"North Island",                    region:"Island/North Coast",           winner2024:"Conservative", candidates:{} },
+  { id:46, name:"North Vancouver-Lonsdale",        region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Bowinn Ma" } },
+  { id:47, name:"North Vancouver-Seymour",         region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:48, name:"Oak Bay-Gordon Head",             region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Diana Gibson", Green:"TBD" } },
+  { id:49, name:"Peace River North",               region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:50, name:"Peace River South",               region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:51, name:"Penticton-Summerland",            region:"Interior",                     winner2024:"Conservative", candidates:{ NDP:"Amelia Boultbee" } },
+  { id:52, name:"Port Coquitlam",                  region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Mike Farnworth" } },
+  { id:53, name:"Port Moody-Burquitlam",           region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:54, name:"Powell River-Sunshine Coast",     region:"Island/North Coast",           winner2024:"NDP",          candidates:{} },
+  { id:55, name:"Prince George-Mackenzie",         region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:56, name:"Prince George-North Cariboo",     region:"Interior",                     winner2024:"Conservative", candidates:{ Conservative:"Sheldon Clare" } },
+  { id:57, name:"Prince George-Valemount",         region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:58, name:"Richmond Centre",                 region:"Metro Vancouver",              winner2024:"Conservative", candidates:{} },
+  { id:59, name:"Richmond-Bridgeport",             region:"Metro Vancouver",              winner2024:"Conservative", candidates:{ CentreBC:"Teresa Wat" } },
+  { id:60, name:"Richmond-Queensborough",          region:"Metro Vancouver",              winner2024:"Conservative", candidates:{} },
+  { id:61, name:"Richmond-Steveston",              region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:62, name:"Saanich North and the Islands",   region:"Island/North Coast",           winner2024:"Green",        candidates:{ Green:"Rob Botterell", NDP:"TBD" } },
+  { id:63, name:"Saanich South",                   region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Lana Popham" } },
+  { id:64, name:"Salmon Arm-Shuswap",              region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:65, name:"Skeena",                          region:"Island/North Coast",           winner2024:"Conservative", candidates:{} },
+  { id:66, name:"Surrey City Centre",              region:"Fraser Valley/Lower Mainland", winner2024:"NDP",          candidates:{ NDP:"Amna Shah" } },
+  { id:67, name:"Surrey North",                    region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:68, name:"Surrey South",                    region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{ Conservative:"Brent Chapman" } },
+  { id:69, name:"Surrey-Cloverdale",               region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:70, name:"Surrey-Fleetwood",                region:"Fraser Valley/Lower Mainland", winner2024:"NDP",          candidates:{ NDP:"Jagrup Brar" } },
+  { id:71, name:"Surrey-Guildford",                region:"Fraser Valley/Lower Mainland", winner2024:"NDP",          candidates:{} },
+  { id:72, name:"Surrey-Newton",                   region:"Fraser Valley/Lower Mainland", winner2024:"NDP",          candidates:{} },
+  { id:73, name:"Surrey-Panorama",                 region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:74, name:"Surrey-Serpentine River",         region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:75, name:"Surrey-White Rock",               region:"Fraser Valley/Lower Mainland", winner2024:"Conservative", candidates:{} },
+  { id:76, name:"Vancouver-Fraserview",            region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:77, name:"Vancouver-Hastings",              region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Niki Sharma" } },
+  { id:78, name:"Vancouver-Kensington",            region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:79, name:"Vancouver-Langara",               region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Sunita Dhir" } },
+  { id:80, name:"Vancouver-Little Mountain",       region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:81, name:"Vancouver-Point Grey",            region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"David Eby" } },
+  { id:82, name:"Vancouver-Quilchena",             region:"Metro Vancouver",              winner2024:"Conservative", candidates:{} },
+  { id:83, name:"Vancouver-Renfrew",               region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Adrian Dix" } },
+  { id:84, name:"Vancouver-South Granville",       region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:85, name:"Vancouver-Strathcona",            region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:86, name:"Vancouver-West End",              region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Spencer Chandra Herbert" } },
+  { id:87, name:"Vancouver-Yaletown",              region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
+  { id:88, name:"Vernon-Lumby",                    region:"Interior",                     winner2024:"NDP",          candidates:{} },
+  { id:89, name:"Victoria-Beacon Hill",            region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Grace Lore" } },
+  { id:90, name:"Victoria-Swan Lake",              region:"Island/North Coast",           winner2024:"NDP",          candidates:{ NDP:"Nina Krieger" } },
+  { id:91, name:"West Kelowna-Peachland",          region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:92, name:"West Vancouver-Capilano",         region:"Metro Vancouver",              winner2024:"Conservative", candidates:{} },
+  { id:93, name:"West Vancouver-Sea to Sky",       region:"Metro Vancouver",              winner2024:"Green",        candidates:{ Green:"Jeremy Valeriote", NDP:"TBD" } },
 ];
 
 // ─────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────
 let activeParty = "all";
+let sortMode    = "alpha";
 
 // ─────────────────────────────────────────────
 // COUNTS
@@ -429,111 +444,163 @@ let activeParty = "all";
 function candidateCounts() {
   const c = {};
   PARTY_ORDER.forEach(p => c[p] = 0);
-  RIDINGS.forEach(r => {
-    PARTY_ORDER.forEach(p => {
-      if (r.candidates[p]) c[p]++;
-    });
-  });
+  RIDINGS.forEach(r => PARTY_ORDER.forEach(p => { if (r.candidates[p]) c[p]++; }));
   return c;
 }
 
 // ─────────────────────────────────────────────
-// RENDER HEADER
+// SORT
+// ─────────────────────────────────────────────
+function sortedRidings() {
+  const ridings = [...RIDINGS];
+  if (sortMode === "alpha") {
+    return ridings; // source array is already alphabetical
+  }
+  if (sortMode === "nominated") {
+    return ridings.sort((a, b) => {
+      if (activeParty === "all") {
+        const aCnt = Object.values(a.candidates).filter(Boolean).length;
+        const bCnt = Object.values(b.candidates).filter(Boolean).length;
+        if (bCnt !== aCnt) return bCnt - aCnt;
+      } else {
+        const aHas = a.candidates[activeParty] ? 1 : 0;
+        const bHas = b.candidates[activeParty] ? 1 : 0;
+        if (bHas !== aHas) return bHas - aHas;
+      }
+      return a.name.localeCompare(b.name);
+    });
+  }
+  if (sortMode === "region") {
+    return ridings.sort((a, b) => {
+      const aR = REGION_ORDER.indexOf(a.region);
+      const bR = REGION_ORDER.indexOf(b.region);
+      if (aR !== bR) return aR - bR;
+      return a.name.localeCompare(b.name);
+    });
+  }
+  return ridings;
+}
+
+// ─────────────────────────────────────────────
+// CARD HTML
+// ─────────────────────────────────────────────
+function cardHTML(r) {
+  const winnerKey = (PARTIES[r.winner2024] || {}).key || "con";
+  const isAll     = activeParty === "all";
+  const hasCand   = !!r.candidates[activeParty];
+  const isActive  = isAll || hasCand;
+
+  let candidateLine = "";
+  if (!isAll) {
+    const name = r.candidates[activeParty];
+    if (name && name !== "TBD") {
+      candidateLine = `<div class="candidate-name">${name}</div>`;
+    } else if (name === "TBD") {
+      candidateLine = `<div class="candidate-name tbd">Candidate TBD</div>`;
+    } else {
+      candidateLine = `<div class="candidate-name tbd">Not yet nominated</div>`;
+    }
+  }
+
+  const dots = PARTY_ORDER
+    .filter(p => r.candidates[p])
+    .map(p => `<span class="dot ${PARTIES[p].key}" title="${PARTIES[p].label}"></span>`)
+    .join("");
+
+  return `
+    <div class="riding-card ${isActive ? "" : "dim"}">
+      <div class="winner-stripe ${winnerKey}" title="2024: ${r.winner2024}"></div>
+      <div class="card-body">
+        <div class="riding-name">${r.name}</div>
+        ${candidateLine}
+        <div class="party-dots">${dots}</div>
+      </div>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────
+// RENDER
 // ─────────────────────────────────────────────
 function renderHeader() {
   const counts = candidateCounts();
-  const total = Object.values(counts).reduce((a,b)=>a+b,0);
-  const pills = document.getElementById("countPills");
-  const bar   = document.getElementById("propBar");
+  const total  = Object.values(counts).reduce((a,b) => a+b, 0);
+  const pills  = document.getElementById("countPills");
+  const bar    = document.getElementById("propBar");
   pills.innerHTML = "";
   bar.innerHTML   = "";
   PARTY_ORDER.forEach(p => {
     if (!counts[p]) return;
     const { label, key, color } = PARTIES[p];
     const abbr = { NDP:"NDP", Conservative:"Con", Green:"Green", CentreBC:"CentreBC", Independent:"Ind." }[p] || p;
-    pills.innerHTML += `<span class="pill ${key}" title="${label} – ${counts[p]} candidates nominated"><span class="pill-count">${counts[p]}</span> ${abbr}</span>`;
+    pills.innerHTML += `<span class="pill ${key}" title="${label} – ${counts[p]} candidates"><span class="pill-count">${counts[p]}</span> ${abbr}</span>`;
     bar.innerHTML   += `<span style="width:${(counts[p]/total*100).toFixed(2)}%;background:${color};opacity:.8"></span>`;
   });
 }
 
-// ─────────────────────────────────────────────
-// RENDER FILTER BUTTONS
-// ─────────────────────────────────────────────
 function renderFilters() {
   const counts = candidateCounts();
   const fg = document.getElementById("filterGroup");
-  fg.innerHTML = `<button class="filter-btn all ${activeParty==='all'?'active':''}" data-party="all">All parties</button>`;
+  fg.innerHTML = `<button class="filter-btn all ${activeParty==="all"?"active":""}" data-party="all">All parties</button>`;
   PARTY_ORDER.forEach(p => {
     const { label, key } = PARTIES[p];
-    const cnt = counts[p];
-    fg.innerHTML += `<button class="filter-btn ${key} ${activeParty===p?'active':''}" data-party="${p}">${label} (${cnt})</button>`;
+    fg.innerHTML += `<button class="filter-btn ${key} ${activeParty===p?"active":""}" data-party="${p}">${label} (${counts[p]})</button>`;
   });
   fg.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      activeParty = btn.dataset.party;
-      renderAll();
-    });
+    btn.addEventListener("click", () => { activeParty = btn.dataset.party; renderAll(); });
   });
 }
 
-// ─────────────────────────────────────────────
-// RENDER GRID
-// ─────────────────────────────────────────────
-function renderGrid() {
-  const grid = document.getElementById("ridingGrid");
-  let shown = 0;
+function renderMain() {
+  const sorted = sortedRidings();
+  const main   = document.getElementById("mainContent");
+  let nominated = 0;
 
-  grid.innerHTML = RIDINGS.map(r => {
-    const winnerKey = (PARTIES[r.winner2024] || {}).key || "con";
+  if (sortMode === "region") {
+    // Group into regions with headings
+    const byRegion = {};
+    sorted.forEach(r => {
+      (byRegion[r.region] = byRegion[r.region] || []).push(r);
+      if (activeParty === "all" || r.candidates[activeParty]) nominated++;
+    });
 
-    // Determine if this card is "active" for the current filter
-    const isAll = activeParty === "all";
-    const hasCandidate = !!r.candidates[activeParty];
-    const isActive = isAll || hasCandidate;
-
-    if (isActive) shown++;
-
-    // Candidate name line
-    let candidateLine = "";
-    if (!isAll) {
-      const name = r.candidates[activeParty];
-      if (name && name !== "TBD") {
-        candidateLine = `<div class="candidate-name">${name}</div>`;
-      } else if (name === "TBD") {
-        candidateLine = `<div class="candidate-name tbd">Candidate TBD</div>`;
-      } else {
-        candidateLine = `<div class="candidate-name tbd">Not yet nominated</div>`;
-      }
-    }
-
-    // Party dots — which parties have a candidate in this riding
-    const dots = PARTY_ORDER
-      .filter(p => r.candidates[p])
-      .map(p => `<span class="dot ${PARTIES[p].key}" title="${PARTIES[p].label}"></span>`)
-      .join("");
-
-    return `
-      <div class="riding-card ${isActive ? '' : 'dim'}">
-        <div class="winner-stripe ${winnerKey}" title="2024: ${r.winner2024}"></div>
-        <div class="card-body">
-          <div class="riding-name">${r.name}</div>
-          ${candidateLine}
-          <div class="party-dots">${dots}</div>
-        </div>
-      </div>`;
-  }).join("");
+    main.innerHTML = REGION_ORDER
+      .filter(reg => byRegion[reg])
+      .map(reg => {
+        const ridings = byRegion[reg];
+        const cnt = activeParty === "all"
+          ? ridings.length
+          : ridings.filter(r => r.candidates[activeParty]).length;
+        return `
+          <div class="region-section">
+            <div class="region-heading">
+              <h2>${reg}</h2>
+              <span class="region-count">${cnt} of ${ridings.length}${activeParty !== "all" ? " nominated" : ""}</span>
+            </div>
+            <div class="riding-grid">${ridings.map(cardHTML).join("")}</div>
+          </div>`;
+      }).join("");
+  } else {
+    sorted.forEach(r => { if (activeParty === "all" || r.candidates[activeParty]) nominated++; });
+    main.innerHTML = `<div class="riding-grid">${sorted.map(cardHTML).join("")}</div>`;
+  }
 
   document.getElementById("resultCount").textContent =
     activeParty === "all"
       ? `${RIDINGS.length} ridings`
-      : `${shown} of ${RIDINGS.length} nominated`;
+      : `${nominated} of ${RIDINGS.length} nominated`;
 }
 
 function renderAll() {
   renderHeader();
   renderFilters();
-  renderGrid();
+  renderMain();
 }
+
+// Sort dropdown
+document.getElementById("sortSelect").addEventListener("change", e => {
+  sortMode = e.target.value;
+  renderAll();
+});
 
 renderAll();
 </script>
