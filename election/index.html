@@ -579,6 +579,28 @@ function renderMain() {
             <div class="riding-grid">${ridings.map(cardHTML).join("")}</div>
           </div>`;
       }).join("");
+  } else if (sortMode === "nominated") {
+    // Split into nominated / not-yet-nominated sections
+    const isAll = activeParty === "all";
+    const withCand    = sorted.filter(r => isAll ? Object.values(r.candidates).some(Boolean) : !!r.candidates[activeParty]);
+    const withoutCand = sorted.filter(r => isAll ? !Object.values(r.candidates).some(Boolean) : !r.candidates[activeParty]);
+    nominated = withCand.length;
+
+    const sectionHTML = (heading, countLabel, ridings) => `
+      <div class="region-section">
+        <div class="region-heading">
+          <h2>${heading}</h2>
+          <span class="region-count">${countLabel}</span>
+        </div>
+        <div class="riding-grid">${ridings.map(cardHTML).join("")}</div>
+      </div>`;
+
+    const nominatedLabel   = isAll ? "At least one party" : PARTIES[activeParty].label;
+    const unNominatedLabel = isAll ? "No candidates yet" : "Not yet nominated";
+
+    main.innerHTML =
+      (withCand.length    ? sectionHTML(nominatedLabel,   `${withCand.length} ridings`,    withCand)    : "") +
+      (withoutCand.length ? sectionHTML(unNominatedLabel, `${withoutCand.length} ridings`, withoutCand) : "");
   } else {
     sorted.forEach(r => { if (activeParty === "all" || r.candidates[activeParty]) nominated++; });
     main.innerHTML = `<div class="riding-grid">${sorted.map(cardHTML).join("")}</div>`;
