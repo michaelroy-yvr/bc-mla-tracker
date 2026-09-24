@@ -24,12 +24,14 @@
   --con:   #003F8C;
   --grn:   #2E7D32;
   --cbc:   #00695C;
+  --one:   #7B1FA2;
   --ind:   #546E7A;
 
   --ndp-bg:   #FFF3E6;
   --con-bg:   #E8EEF7;
   --grn-bg:   #E8F5E9;
   --cbc-bg:   #E0F2F1;
+  --one-bg:   #F3E5F5;
   --ind-bg:   #ECEFF1;
 }
 @media (prefers-color-scheme: dark) {
@@ -46,6 +48,7 @@
     --con-bg:   #001833;
     --grn-bg:   #0A1F0A;
     --cbc-bg:   #0A2320;
+    --one-bg:   #1A0A1F;
     --ind-bg:   #0E1A20;
   }
 }
@@ -62,6 +65,7 @@
   --con-bg:   #001833;
   --grn-bg:   #0A1F0A;
   --cbc-bg:   #0A2320;
+  --one-bg:   #1A0A1F;
   --ind-bg:   #0E1A20;
 }
 
@@ -123,6 +127,7 @@ header {
 .pill.con { background: rgba(0,63,140,.35);   color: #7BAEE8; border: 1px solid rgba(0,63,140,.5); }
 .pill.grn { background: rgba(46,125,50,.3);   color: #81C784; border: 1px solid rgba(46,125,50,.5); }
 .pill.cbc { background: rgba(0,105,92,.3);    color: #4DB6AC; border: 1px solid rgba(0,105,92,.5); }
+.pill.one { background: rgba(123,31,162,.3);  color: #CE93D8; border: 1px solid rgba(123,31,162,.5); }
 .pill.ind { background: rgba(84,110,122,.3);  color: #90A4AE; border: 1px solid rgba(84,110,122,.5); }
 
 .seat-prop-bar { height: 3px; display: flex; width: 100%; overflow: hidden; margin-top: 4px; }
@@ -158,6 +163,7 @@ header {
 .filter-btn.con   { background: var(--con-bg); color: var(--con); border-color: var(--con); }
 .filter-btn.grn   { background: var(--grn-bg); color: var(--grn); border-color: var(--grn); }
 .filter-btn.cbc   { background: var(--cbc-bg); color: var(--cbc); border-color: var(--cbc); }
+.filter-btn.one   { background: var(--one-bg); color: var(--one); border-color: var(--one); }
 .filter-btn.ind   { background: var(--ind-bg); color: var(--ind); border-color: var(--ind); }
 
 .sort-wrap { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
@@ -219,6 +225,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 .winner-stripe.ndp { background: var(--ndp); }
 .winner-stripe.con { background: var(--con); }
 .winner-stripe.grn { background: var(--grn); }
+.winner-stripe.one { background: var(--one); }
 
 .card-body {
   padding: 10px 11px 9px;
@@ -246,6 +253,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 20px 60px; }
 .dot.con { background: var(--con); }
 .dot.grn { background: var(--grn); }
 .dot.cbc { background: var(--cbc); }
+.dot.one { background: var(--one); }
 .dot.ind { background: var(--ind); }
 
 /* ── intro overlay ── */
@@ -458,9 +466,10 @@ const PARTIES = {
   Conservative: { label:"Conservative", key:"con", color:"#003F8C" },
   Green:        { label:"BC Greens",    key:"grn", color:"#2E7D32" },
   CentreBC:     { label:"CentreBC",     key:"cbc", color:"#00695C" },
+  OneBC:        { label:"OneBC",        key:"one", color:"#7B1FA2" },
   Independent:  { label:"Independent",  key:"ind", color:"#546E7A" },
 };
-const PARTY_ORDER = ["NDP","Conservative","Green","CentreBC","Independent"];
+const PARTY_ORDER = ["NDP","Conservative","Green","CentreBC","OneBC","Independent"];
 
 const REGION_ORDER = ["Metro Vancouver","Fraser Valley/Lower Mainland","Island/North Coast","Interior"];
 
@@ -518,7 +527,7 @@ const RIDINGS = [
   { id:48, name:"Oak Bay-Gordon Head",             region:"Island/North Coast",           winner2024:"NDP",          candidates:{ CentreBC:"Andrew Weaver" } },
   { id:49, name:"Peace River North",               region:"Interior",                     winner2024:"Conservative", candidates:{} },
   { id:50, name:"Peace River South",               region:"Interior",                     winner2024:"Conservative", candidates:{Conservative:"Larry Neufeld"} },
-  { id:51, name:"Penticton-Summerland",            region:"Interior",                     winner2024:"Conservative", candidates:{} },
+  { id:51, name:"Penticton-Summerland",            region:"Interior",                     winner2024:"Conservative", candidates:{ OneBC:"Warren Hamm" } },
   { id:52, name:"Port Coquitlam",                  region:"Metro Vancouver",              winner2024:"NDP",          candidates:{ NDP:"Mike Farnworth" } },
   { id:53, name:"Port Moody-Burquitlam",           region:"Metro Vancouver",              winner2024:"NDP",          candidates:{} },
   { id:54, name:"Powell River-Sunshine Coast",     region:"Island/North Coast",           winner2024:"NDP",          candidates:{} },
